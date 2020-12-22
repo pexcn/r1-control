@@ -114,6 +114,10 @@ if(base64url=='base64('){
 pos=videourl.indexOf(')base64');
 base64url=videourl.substring(7,pos);
 videourl=Base64.decode(base64url);
+    if(videourl.substring(0,5) == 'jump:'){
+        var jumpurl = videourl.substring(5);
+        location.href = jumpurl;
+    }
 }
 title=videourl.substring(0,7);
 if(title=="[title:"){
