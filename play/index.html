@@ -116,7 +116,6 @@ base64url=videourl.substring(7,pos);
 videourl=Base64.decode(base64url);
     if(videourl.substring(0,5) == 'jump:'){
         var jumpurl = videourl.substring(5);
-        alert(jumpurl);
         location.href = jumpurl;
     }
 }
