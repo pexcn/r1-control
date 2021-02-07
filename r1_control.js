@@ -63,9 +63,9 @@ function click(data){
                     var text = document.getElementById('text');
                     if(d.code == 200){
                         text.value = '['+data.value+']:已提交，开始播放。。。';
-                        get(data.value,param.url,{what:4,arg1:3});
+                        get(data.value+'[play]',param.url,{what:4,arg1:3});
                     }else{
-                        text.value = '['+data.value+']play:'+d.msg;
+                        text.value = '['+data.value+']:'+d.msg;
                     }
                 };
             get(data.value,param.url,{what:4,arg1:1,obj:json},call);
