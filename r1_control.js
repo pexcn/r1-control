@@ -76,9 +76,9 @@ function get(type,url,data,call=null){
     var text = document.getElementById('text');
     text.value = '['+type+']:请稍后。。。';
     if(call == null){
-        call = function(data){
+        call = function(a){
             var text = document.getElementById('text');
-            text.value = '['+type+']:'+data.data;
+            text.value = '['+type+']:'+a.data;
         };
     }
 	$.ajax({type:'GET',
