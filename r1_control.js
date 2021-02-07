@@ -79,8 +79,7 @@ function load(){
      document.getElementsByTagName("head")[0].style.innerHTML = head;
      divs.id = 'divs';
      divs.style = 'text-align: center;display:block;margin:10px auto';
-     document.getElementsByTagName("body")[0].innerHTML = "";
-     document.getElementsByTagName("body")[0].appendChild(divs);
      document.getElementsByTagName("body")[0].innerHTML = "<h3>R1音箱控制页面</h3><script src='https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'></script>" + document.getElementsByTagName("body")[0].innerHTML;
+     document.getElementsByTagName("body")[0].appendChild(divs);
 	 document.getElementsByTagName("body")[0].style.cssText = img;
 }
