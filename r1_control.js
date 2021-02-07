@@ -8,7 +8,7 @@ var buttons = [['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0}],
 ['关闭氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:0},type:0}],
 ['重启音箱',{url:ip+'/shell',param:{shell:'reboot'},type:0}],
-['执行命令',{url:ip+'/shell',input:'shell',{shell:'${shell}'},type:1}],
+['执行命令',{url:ip+'/shell',input:'shell',param:{shell:'${shell}'},type:1}],
 ['播放音乐',{url:ip+'/send_message',type:2,itemType:'play'}]];
 
 window.onload = function(){
