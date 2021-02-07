@@ -79,12 +79,12 @@ function load(){
      document.getElementsByTagName("head")[0].innerHTML = head;
      divs.id = 'divs';
      divs.style = 'text-align: center;display:block;margin:10px auto';
-     document.getElementsByTagName("body")[0].innerHTML = "<h3>R1音箱控制页面</h3>";
+     document.getElementsByTagName("body")[0].innerHTML = "<h3>R1音箱控制页面</h3>" + document.getElementsByTagName("body")[0].innerHTML;;
      document.getElementsByTagName("body")[0].appendChild(divs);
      var script = document.createElement('script');
      script.type = 'text/javascript';
      script.src = 'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js';
      document.getElementsByTagName("body")[0].appendChild(script);
+    
 	 document.getElementsByTagName("body")[0].style.cssText = img;
-     document.getElementsByTagName("body")[0].innerHTML = document.getElementsByTagName("body")[0].innerHTML + document.getElementsByTagName("body")[0].innerHTML;
 }
