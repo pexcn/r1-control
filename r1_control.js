@@ -8,8 +8,8 @@ var buttons = [['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0}],
 ['关闭氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:0},type:0}],
 ['重启音箱',{url:ip+'/shell',param:{shell:'reboot'},type:0}],
-['执行命令',{url:ip+'/shell',input:'shell',type:1}]];
-
+['执行命令',{url:ip+'/shell',input:'shell',{shell:'${shell}'},type:1}],
+['播放音乐',{url:ip+'/send_message',type:2,itemType:'play'}]];
 
 window.onload = function(){
 	load();
@@ -54,23 +54,36 @@ function click(data){
 	var param = JSON.parse(data.getAttribute('data'));
 	var input = document.getElementById('input');
 	if(param.type == 1){
-		get(data.value,param.url,JSON.parse('{"'+param.input+'":"'+input.value+'"}'));
-	}else{
+		get(data.value,param.url,JSON.parse(JSON.stringify(param.param).replace('${'.param.input.'}',input)));
+	}else if(param.type == 2){
+        if(param.itemType == 'music'){
+            var json = '{"itemType":0,"title":" ","url":"'+input+'","itemId":"1","album":"","artist":" "}';
+            var call = function(){
+                    var text = document.getElementById('text');
+                    text.value = '['+type+']:已提交，开始播放。。。';
+                    get(data.value,param.url,{what:4,arg1:1});
+            };
+            get(data.value,param.url,{what:4,arg1:3,obj:json},call);
+        }
+    }else{
 		get(data.value,param.url,param.param);
 	}
 }
 
 
-function get(type,url,data){
+function get(type,url,data,call=null){
+    if(call == null){
+        call = function(data){
+            var text = document.getElementById('text');
+            text.value = '['+type+']:'+data.data;
+        };
+    }
 	text.value = '['+type+']:请稍后。。。';
 	$.ajax({type:'GET',
 	url:url,
 	dataType:'jsonp',
 	data:data,
-	success:function(data){
-		var text = document.getElementById('text');
-		text.value = '['+type+']:'+data.data;
-	}});
+	success:call});
 }
 
 function load(){
@@ -85,6 +98,5 @@ function load(){
      script.type = 'text/javascript';
      script.src = 'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js';
      document.getElementsByTagName("body")[0].appendChild(script);
-    
 	 document.getElementsByTagName("body")[0].style.cssText = img;
 }
