@@ -58,7 +58,7 @@ function click(data){
 		get(data.value,param.url,JSON.parse(json));
 	}else if(param.type == 2){
         if(param.itemType == 'music'){
-            var json = '{"itemType":0,"title":" ","url":"'+input+'","itemId":"1","album":"","artist":" "}';
+            var json = '{"itemType":0,"title":" ","url":"'+input.value+'","itemId":"1","album":"","artist":" "}';
             var call = function(){
                     var text = document.getElementById('text');
                     text.value = '['+type+']:已提交，开始播放。。。';
