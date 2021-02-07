@@ -61,9 +61,14 @@ function click(data){
             var json = '{"itemList":[{"itemType":0,"title":" ","url":"'+input.value+'","itemId":"1","album":"","artist":" "}]}';
             var call = function(){
                     var text = document.getElementById('text');
-                    text.value = '['+data.value+']:已提交，开始播放。。。';
-                    get(data.value,param.url,{what:4,arg1:3});
-            };
+                    if(data.code == 200){
+                        text.value = '['+type+']:'+data.data;
+                        text.value = '['+data.value+']:已提交，开始播放。。。';
+                        get(data.value,param.url,{what:4,arg1:3});
+                    }else{
+                        text.value = '['+type+']:'+data.msg;
+                    }
+                };
             get(data.value,param.url,{what:4,arg1:1,obj:json},call);
         }
     }else{
@@ -77,9 +82,12 @@ function get(type,url,data,call=null){
     text.value = '['+type+']:请稍后。。。';
     if(call == null){
         call = function(data){
-            console.log(data);
             var text = document.getElementById('text');
-            text.value = '['+type+']:'+data.data;
+            if(data.code == 200){
+                text.value = '['+type+']:'+data.data;
+            }else{
+                text.value = '['+type+']:'+data.msg;
+            }
         };
     }
 	$.ajax({type:'GET',
