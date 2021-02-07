@@ -62,9 +62,9 @@ function click(data){
             var call = function(){
                     var text = document.getElementById('text');
                     text.value = '['+data.value+']:已提交，开始播放。。。';
-                    get(data.value,param.url,{what:4,arg1:1});
+                    get(data.value,param.url,{what:4,arg1:3});
             };
-            get(data.value,param.url,{what:4,arg1:3,obj:json},call);
+            get(data.value,param.url,{what:4,arg1:1,obj:json},call);
         }
     }else{
 		get(data.value,param.url,param.param);
