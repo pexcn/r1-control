@@ -59,14 +59,13 @@ function click(data){
 	}else if(param.type == 2){
         if(param.itemType == 'play'){
             var json = '{"itemList":[{"itemType":0,"title":" ","url":"'+input.value+'","itemId":"1","album":"","artist":" "}]}';
-            var call = function(){
+            var call = function(d){
                     var text = document.getElementById('text');
-                    if(data.code == 200){
-                        text.value = '['+type+']:'+data.data;
+                    if(d.code == 200){
                         text.value = '['+data.value+']:已提交，开始播放。。。';
                         get(data.value,param.url,{what:4,arg1:3});
                     }else{
-                        text.value = '['+type+']:'+data.msg;
+                        text.value = '['+data.value+']:'+d.msg;
                     }
                 };
             get(data.value,param.url,{what:4,arg1:1,obj:json},call);
