@@ -54,7 +54,8 @@ function click(data){
 	var param = JSON.parse(data.getAttribute('data'));
 	var input = document.getElementById('input');
 	if(param.type == 1){
-		get(data.value,param.url,JSON.parse(JSON.stringify(param.param).replace('${'.param.input.'}',input)));
+        var json = JSON.stringify(param.param).replace('${'+param.input+'}',input);
+		get(data.value,param.url,JSON.parse(json));
 	}else if(param.type == 2){
         if(param.itemType == 'music'){
             var json = '{"itemType":0,"title":" ","url":"'+input+'","itemId":"1","album":"","artist":" "}';
