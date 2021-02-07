@@ -73,13 +73,14 @@ function click(data){
 
 
 function get(type,url,data,call=null){
+    var text = document.getElementById('text');
+    text.value = '['+type+']:请稍后。。。';
     if(call == null){
         call = function(data){
             var text = document.getElementById('text');
             text.value = '['+type+']:'+data.data;
         };
     }
-	text.value = '['+type+']:请稍后。。。';
 	$.ajax({type:'GET',
 	url:url,
 	dataType:'jsonp',
