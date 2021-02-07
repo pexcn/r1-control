@@ -61,7 +61,7 @@ function click(data){
             var json = '{"itemType":0,"title":" ","url":"'+input.value+'","itemId":"1","album":"","artist":" "}';
             var call = function(){
                     var text = document.getElementById('text');
-                    text.value = '['+type+']:已提交，开始播放。。。';
+                    text.value = '['+data.value+']:已提交，开始播放。。。';
                     get(data.value,param.url,{what:4,arg1:1});
             };
             get(data.value,param.url,{what:4,arg1:3,obj:json},call);
