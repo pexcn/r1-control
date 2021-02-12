@@ -2,7 +2,7 @@ if(!ip){
 	var ip = '';
 }
 var h3 = document.getElementsByTagName('h3')[0];
-var divs = document.createElement('divs');
+var divs = document.createElement('div');
 var buttons = [['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg2:-1},type:0}],
 ['关闭蓝牙',{url:ip+'/send_message',param:{what:64,arg1:2,arg2:-1},type:0}],
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0}],
@@ -109,4 +109,9 @@ function load(){
      script.src = 'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js';
      document.getElementsByTagName("body")[0].appendChild(script);
 	 document.getElementsByTagName("body")[0].style.cssText = img;
+     var div = document.createElement('div');
+     div.id = 'qun_div';
+     div.style = 'position:fixed; bottom: 10px;';
+     div.innerHTML = "<a id='qun' style='color:#FF6347;' href='https://jq.qq.com/?_wv=1027&k=hTbg34eR'>斐讯R1音箱交流群：772694950</a>";
+     divs.appendChild(div);
 }
