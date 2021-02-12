@@ -115,5 +115,5 @@ function load(){
      div.id = 'qun_div';
      div.style = 'position:relative; bottom: 10px;';
      div.innerHTML = "<a id='qun' style='color:#FF6347;' href='https://jq.qq.com/?_wv=1027&k=hTbg34eR'>斐讯R1音箱交流群：772694950</a>";
-     divs.appendChild(div);
+     document.getElementsByTagName("body")[0].appendChild(div);
 }
