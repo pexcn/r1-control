@@ -56,7 +56,7 @@ input[type=range] {
 	margin: 15px 10px;
 	background: #FF6347; 
     -webkit-appearance: none;
-    width: 300px;
+    width: 50%;
     border-radius: 10px; /*这个属性设置使填充进度条时的图形为圆角*/
 }
 
