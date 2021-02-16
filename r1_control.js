@@ -1,8 +1,11 @@
 if(!ip){
 	var ip = '';
 }
+var timer;
 var h3 = document.getElementsByTagName('h3')[0];
 var divs = document.createElement('div');
+var vol = document.createElement('input');
+var vol_text = document.createElement('text');
 var buttons = [['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg2:-1},type:0}],
 ['关闭蓝牙',{url:ip+'/send_message',param:{what:64,arg1:2,arg2:-1},type:0}],
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0}],
@@ -37,8 +40,22 @@ window.onload = function(){
     input.style = 'display:block;margin:10px auto; width:80%; height:50px;font-size: 16px;color: #FF6347;border-color: #FF6347;outline: none;background:rgba(255, 255, 255, 0.2);border-radius:15px;';
     divs.append(input);
     divs.append(document.createElement('br'));
-	
-	
+    var text = document.createElement('text');
+	text.style = 'color:#FF6347;';
+	text.innerHTML = '音量：';
+	divs.appendChild(text);
+	vol.type = 'range';
+    vol.min = 0;
+    vol.step = 1;
+    vol.max = 15;
+    vol.
+	divs.appendChild(vol);
+    setInterval(function(){$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{},success:function(data){if(data.code == 200){vol.value = data.data;document.getElementById('vol_text').innerHTML = '   '+vol.value+'/'.vol.max;}}});},1000);
+    vol_text = document.createElement('text');
+	vol_text.style = 'color:#FF6347;';
+	vol_text.innerHTML = ' 0/15';
+    addEventListener('input', function() {$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{'vol':this.value}})});
+	divs.appendChild(vol_text);
 	for(var i=0;i<buttons.length;i++){
 		var btn = document.createElement("input");
 		btn.id = 'btn_'+i;
