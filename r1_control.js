@@ -100,7 +100,7 @@ function click(data){
             if(input.value == ''){
                 img = background;
                 localStorage.removeItem('background');
-                text.value = '已恢复默认背景';
+                text.value = '已恢复默认背景！';
             }else{
                 img = 'background: url("'+input.value+'") center top / cover no-repeat fixed;';
                 localStorage.setItem('background',img);
