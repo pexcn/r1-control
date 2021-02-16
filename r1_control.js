@@ -48,13 +48,14 @@ window.onload = function(){
     vol.min = 0;
     vol.step = 1;
     vol.max = 15;
-    vol.addEventListener('input', function() {$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{'vol':this.value}})});
+    vol.addEventListener('input', function() {vol_text.innerHTML = '   '+this.value+'/'+this.max;$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{'vol':this.value}})});
 	divs.appendChild(vol);
-    setInterval(function(){$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{},success:function(data){if(data.code == 200){vol.value = data.data;document.getElementById('vol_text').innerHTML = '   '+vol.value+'/'.vol.max;}}});},1000);
+    setInterval(function(){$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{},success:function(data){if(data.code == 200){vol.value = data.data;document.getElementById('vol_text').innerHTML = '   '+vol.value+'/'+vol.max;}}});},1000);
     vol_text = document.createElement('text');
 	vol_text.style = 'color:#FF6347;';
 	vol_text.innerHTML = ' 0/15';
 	divs.appendChild(vol_text);
+    divs.append(document.createElement('br'));
 	for(var i=0;i<buttons.length;i++){
 		var btn = document.createElement("input");
 		btn.id = 'btn_'+i;
