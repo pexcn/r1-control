@@ -14,7 +14,8 @@ var buttons = [['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg
 ['执行命令',{url:ip+'/shell',input:'shell',param:{shell:'${shell}'},type:1}],
 ['设置氛围灯亮度',{url:ip+'/send_message',input:'arg2',param:{what:4,arg1:65,arg2:'${arg2}'},type:1}],
 ['切换官方氛围效果',{url:ip+'/send_message',param:{what:4,arg1:67,arg2:0},type:0}],
-['切换七彩氛围效果',{url:ip+'/send_message',param:{what:4,arg1:67,arg2:1},type:0}]
+['切换七彩氛围效果',{url:ip+'/send_message',param:{what:4,arg1:67,arg2:1},type:0}]，
+['设置背景图片',{type:-1,itemType:'set_background'}]
 ];
 //['播放音乐',{url:ip+'/send_message',type:2,itemType:'play'}]];
 
@@ -90,6 +91,16 @@ function click(data){
                     }
                 };
             get(data.value,param.url,{what:4,arg1:1,obj:json},call);
+        }
+    }else if(param.type == -1){
+        if(param.itemType == 'set_background'){
+            var text = document.getElementById('text');
+            if(input == ''){
+                text.value = '请输入图片链接！';
+                return;
+            }
+            document.getElementsByTagName("body")[0].style.cssText='background: url("'+input+'") center top / cover no-repeat fixed;';
+            text.value = '设置背景图片成功！';
         }
     }else{
 		get(data.value,param.url,param.param);
