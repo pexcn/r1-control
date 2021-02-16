@@ -95,11 +95,11 @@ function click(data){
     }else if(param.type == -1){
         if(param.itemType == 'set_background'){
             var text = document.getElementById('text');
-            if(input == ''){
+            if(input.value == ''){
                 text.value = '请输入图片链接！';
                 return;
             }
-            document.getElementsByTagName("body")[0].style.cssText='background: url("'+input+'") center top / cover no-repeat fixed;';
+            document.getElementsByTagName("body")[0].style.cssText='background: url("'+input.value+'") center top / cover no-repeat fixed;';
             text.value = '设置背景图片成功！';
         }
     }else{
