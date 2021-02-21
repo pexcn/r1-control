@@ -324,7 +324,7 @@ function start_updateinfo(){
 			}
 			
 			var music_btn_play = document.getElementById('music_btn_play');
-			if(data.play_state || data.music_info.state == 1){
+			if(data.play_state || data.music_info.state != 2){
 				music_pic.style.webkitAnimationPlayState = "running";
 			    music_btn_play.value = '暂停';
 			    music_btn_play.setAttribute('data','pause');
