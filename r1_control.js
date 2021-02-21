@@ -1,6 +1,9 @@
 if(!ip){
 	var ip = '';
 }
+if(!ver){
+    var ver = 1000;
+}
 
 var music_id = '';
 var timer = -1;
