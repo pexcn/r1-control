@@ -29,7 +29,7 @@ window.onload = function(){
 	var textarea = document.createElement('textarea');
 	textarea.setAttribute('readonly','readonly');
 	textarea.id = 'text';
-	textarea.style = 'display:block; margin:10px auto; width:80%; height:200px;font-size: 16px;color: #FF6347;border-color: #FF6347;outline: none;background:rgba(255, 255, 255, 0.2);border-radius:15px;';
+	textarea.style = 'display:block; margin:10px auto; width:60%; height:200px;font-size: 16px;color: #FF6347;border-color: #FF6347;outline: none;background:rgba(255, 255, 255, 0.2);border-radius:15px;';
 	divs.append(textarea);
 	divs.append(document.createElement('br'));
 	var text = document.createElement('text');
@@ -39,7 +39,7 @@ window.onload = function(){
 	var input = document.createElement('input');
     input.type = 'text';
     input.id = 'input';
-    input.style = 'display:block;margin:10px auto; width:80%; height:50px;font-size: 16px;color: #FF6347;border-color: #FF6347;outline: none;background:rgba(255, 255, 255, 0.2);border-radius:15px;';
+    input.style = 'display:block;margin:10px auto; width:60%; height:50px;font-size: 16px;color: #FF6347;border-color: #FF6347;outline: none;background:rgba(255, 255, 255, 0.2);border-radius:15px;';
     divs.append(input);
     divs.append(document.createElement('br'));
     var text = document.createElement('text');
