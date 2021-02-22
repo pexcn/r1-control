@@ -503,7 +503,6 @@ function get(tips,type,url,data,call=null){
         call = function(data){
             var text = document.getElementById('text');
             if(data.code == 200){
-                console.log(succ_call);
                 if(type.substr(0,2) == '点播'){
                     switch_music();
                 }
