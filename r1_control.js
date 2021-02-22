@@ -458,7 +458,7 @@ function click(data){
 			}
 		}
         var json = JSON.stringify(param.param).replace('${'+param.input+'}',input.value);
-		get(data.value,param.url,JSON.parse(json));
+		get(param.succ,data.value,param.url,JSON.parse(json));
 	}else if(param.type == 2){
         if(param.itemType == 'play'){
             var json = '{"itemList":[{"itemType":0,"title":" ","url":"'+input.value+'","itemId":"1","album":"","artist":" "}]}';
@@ -466,12 +466,12 @@ function click(data){
                     var text = document.getElementById('text');
                     if(d.code == 200){
                         text.value = '['+data.value+']:已提交，开始播放。。。';
-                        get(data.value+'[play]',param.url,{what:4,arg1:3});
+                        get(param.succ,data.value+'[play]',param.url,{what:4,arg1:3});
                     }else{
                         text.value = '['+data.value+']:'+d.msg;
                     }
                 };
-            get(data.value,param.url,{what:4,arg1:1,obj:json},call);
+            get(param.succ,data.value,param.url,{what:4,arg1:1,obj:json},call);
         }
     }else if(param.type == -1){
         if(param.itemType == 'set_background'){
@@ -491,7 +491,7 @@ function click(data){
         if(data.value == '打开氛围灯' && ver > 1500){
             setTimeout(function(){get(null,'打开氛围灯',ip+'/send_message',{what:4,arg1:67,arg2:0})},500);
         }
-        get(data.value,param.url,param.param);
+        get(param.succ,data.value,param.url,param.param);
 	}
 }
 
