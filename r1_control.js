@@ -428,7 +428,7 @@ function click(data){
         }
     }else{
         if(data.value == '打开氛围灯' && ver > 1500){
-            setTimeout(function(){get(null,'打开氛围灯',ip+'/send_message',{what:4,arg1:67,arg2:0}),500);
+            setTimeout(function(){get(null,'打开氛围灯',ip+'/send_message',{what:4,arg1:67,arg2:0})},500);
         }
         get(param.succ,data.value,param.url,param.param);
 	}
