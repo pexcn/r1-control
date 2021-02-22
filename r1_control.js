@@ -1,5 +1,5 @@
 if(!ip){
-	var ip = '//192.168.6.125:8080';
+	var ip = '';
 }
 if(!ver){
     var ver = 1000;
@@ -521,7 +521,7 @@ function get(tips,type,url,data,call=null){
 }
 
 function load(){
-    var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='referrer' content='never'><title>R1音箱控制页面</title><link rel='stylesheet' href='r1_control.css?t="+new Date().getTime()+"'/></head>";
+    var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='referrer' content='never'><title>R1音箱控制页面</title><link rel='stylesheet' href='https://xfdown.gitee.io/r1_control.css?t="+new Date().getTime()+"'/></head>";
      document.getElementsByTagName("head")[0].innerHTML = head;
      divs.id = 'divs';
      divs.style = 'text-align: center;display:block;margin:10px auto';
