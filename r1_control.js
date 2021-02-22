@@ -24,7 +24,6 @@ var buttons = [['点播音乐',{url:ip+'/send_message',input:'obj',param:{what:6
 ['关闭蓝牙',{url:ip+'/send_message',param:{what:64,arg1:2,arg2:-1},type:0,succ:'已关闭蓝牙！'}],
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0,succ:'已开启氛围灯！'}],
 ['关闭氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:0},type:0,succ:'已关闭氛围灯！'}],
-['重启音箱',{url:ip+'/shell',param:{shell:'reboot'},type:0}],
 ['执行命令',{url:ip+'/shell',input:'shell',param:{shell:'${shell}'},type:1,err:'请输入要执行的命令！'}],
 ['修改唤醒词',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:3,obj:'${obj}'},type:1,min_ver:1600,err:'请输入要修改的唤醒词！',succ:'唤醒词修改成功！'}],
 ['设置氛围灯亮度',{url:ip+'/send_message',input:'arg2',param:{what:4,arg1:65,arg2:'${arg2}'},type:1,err:'请输入要修改的亮度值！',succ:'氛围灯亮度修改成功！'}],
