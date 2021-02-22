@@ -107,7 +107,13 @@ function index(){
 	divs.appendChild(vol_text);
     divs.append(document.createElement('br'));
 	for(var i=0;i<buttons.length;i++){
-		if((ver+1 > buttons[i][1].min_ver && ver-1 < buttons[i][1].max_ver) || (buttons[i][1].min_ver == null && buttons[i][1].max_ver == null)){
+        if(buttons[i][1].min_ver == null){
+            buttons[i][1].min_ver = ver;
+        }
+        if(buttons[i][1].max_ver == null){
+            buttons[i][1].max_ver = ver;
+        }
+		if((ver+1 > buttons[i][1].min_ver && ver-1 < buttons[i][1].max_ver)){
 			var btn = document.createElement("input");
 			btn.id = 'btn_'+i;
 		    btn.type = 'button';
@@ -245,7 +251,13 @@ function new_index(data){
 	}
 	divs.appendChild(document.createElement('br'));
 	for(var i=0;i<buttons.length;i++){
-		if((ver+1 > buttons[i][1].min_ver && ver-1 < buttons[i][1].max_ver) || (buttons[i][1].min_ver == null && buttons[i][1].max_ver == null)){
+        if(buttons[i][1].min_ver == null){
+            buttons[i][1].min_ver = ver;
+        }
+        if(buttons[i][1].max_ver == null){
+            buttons[i][1].max_ver = ver;
+        }
+		if((ver+1 > buttons[i][1].min_ver && ver-1 < buttons[i][1].max_ver)){
 			var btn = document.createElement("input");
 			btn.id = 'btn_'+i;
 		    btn.type = 'button';
