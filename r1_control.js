@@ -503,6 +503,7 @@ function get(succ_call,tips,type,url,data,call=null){
         call = function(data){
             var text = document.getElementById('text');
             if(data.code == 200){
+                console.log(succ_call);
                 if(succ_call != null){
                     succ_call();
                 }
