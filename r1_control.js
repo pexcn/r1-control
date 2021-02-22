@@ -21,8 +21,8 @@ var div_list = document.createElement('div');
 var lists = document.createElement('div');
 var list = document.createElement('table');
 var vol_text = document.createElement('text');
-var buttons = [['点播音乐',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'播放${obj}'},type:1,min_ver:1600,err:'请输入要点播的音乐！',succ:'点播成功！'}],
-['点播电台',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'收听${obj}'},type:1,min_ver:1600,err:'请输入要点播的音乐！',succ:'点播成功！'}],
+var buttons = [['点播音乐',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'播放${obj}'},type:1,min_ver:1600,err:'请输入要点播的音乐！',succ:'点播成功！',succ_call:function(){switch_music();}}],
+['点播电台',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'收听${obj}'},type:1,min_ver:1600,err:'请输入要点播的音乐！',succ:'点播成功！',succ_call:function(){switch_music();}}],
 ['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg2:-1},type:0,succ:'已开启蓝牙！'}],
 ['关闭蓝牙',{url:ip+'/send_message',param:{what:64,arg1:2,arg2:-1},type:0,succ:'已关闭蓝牙！'}],
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0,succ:'已开启氛围灯！'}],
@@ -257,10 +257,8 @@ function new_index(data){
 		btn.onclick = function(){
 			if(texts_div.style.display != 'none'){
 				switch_music();
-				this.value = '切换首页';
 			}else{
 				switch_index();
-				this.value = '切换音乐';
 			}
 			
 		};
@@ -292,6 +290,7 @@ function new_index(data){
 }
 
 function switch_index(){
+    document.getElementById('music_btn_0').value = '切换音乐';
 	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱控制页面';
 	musics_div.style.display = "none";
 	div_list.style.display = "none";
@@ -300,6 +299,7 @@ function switch_index(){
 }
 
 function switch_music(){
+    document.getElementById('music_btn_0').value = '切换首页';
 	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱音乐控制页面';
 	texts_div.style.display = "none";
 	btns_div.style.display = "none";
@@ -337,7 +337,7 @@ function update_list(){
 				if(this.getAttribute('playing') == 'true'){
 					return;
 				}
-				get(null,'播放指定歌曲',ip+'/play',{index:this.getAttribute('index')});
+				get(null,null,'播放指定歌曲',ip+'/play',{index:this.getAttribute('index')});
 			};
 			var span = document.createElement('span');
 			span.innerHTML = (i+1)+'.'+data.playList[i].title+'-'+data.playList[i].artist;
@@ -353,19 +353,19 @@ function update_list(){
 function send_music_cmd(data){
 	type = data.getAttribute('data');
 	if(type == 'prev'){
-		get(null,'上一首',ip+'/prev',{});
+		get(null,null,'上一首',ip+'/prev',{});
 		//get(null,'上一首',ip+'/send_message',{what:4,arg1:5,arg2:0});
 		//setTimeout(function(){get(null,'上一首',ip+'/send_message',{what:4,arg1:3,arg2:0});},500);
 	}else if(type == 'next'){
-		get(null,'下一首',ip+'/next',{});
+		get(null,null,'下一首',ip+'/next',{});
 		//get(null,'下一首',ip+'/send_message',{what:4,arg1:6,arg2:0});
 		//setTimeout(function(){get(null,'下一首',ip+'/send_message',{what:4,arg1:3,arg2:0});},500);
 	}else if(type == 'pause'){
 		//get(null,'暂停',ip+'/pause',{});
-		get(null,'暂停',ip+'/send_message',{what:4,arg1:2,arg2:0});
+		get(null,null,'暂停',ip+'/send_message',{what:4,arg1:2,arg2:0});
 	} if(type == 'play'){
 		//get(null,'播放',ip+'/play',{});
-		get(null,'播放',ip+'/send_message',{what:4,arg1:3,arg2:0});
+		get(null,null,'播放',ip+'/send_message',{what:4,arg1:3,arg2:0});
 	}
 	
 }
@@ -442,7 +442,7 @@ function stop_updateinfo(){
 }
 
 function update_TtsSpeaker(value){
-	get('修改发音人成功！','修改发音人',ip+'/send_message',{what:65536,arg1:0,arg2:2,obj:value});
+	get(null,'修改发音人成功！','修改发音人',ip+'/send_message',{what:65536,arg1:0,arg2:2,obj:value});
 }
 
 
@@ -458,7 +458,7 @@ function click(data){
 			}
 		}
         var json = JSON.stringify(param.param).replace('${'+param.input+'}',input.value);
-		get(param.succ,data.value,param.url,JSON.parse(json));
+		get(param.succ_call,param.succ,data.value,param.url,JSON.parse(json));
 	}else if(param.type == 2){
         if(param.itemType == 'play'){
             var json = '{"itemList":[{"itemType":0,"title":" ","url":"'+input.value+'","itemId":"1","album":"","artist":" "}]}';
@@ -466,12 +466,12 @@ function click(data){
                     var text = document.getElementById('text');
                     if(d.code == 200){
                         text.value = '['+data.value+']:已提交，开始播放。。。';
-                        get(param.succ,data.value+'[play]',param.url,{what:4,arg1:3});
+                        get(param.succ_call,param.succ,data.value+'[play]',param.url,{what:4,arg1:3});
                     }else{
                         text.value = '['+data.value+']:'+d.msg;
                     }
                 };
-            get(param.succ,data.value,param.url,{what:4,arg1:1,obj:json},call);
+            get(param.succ_call,param.succ,data.value,param.url,{what:4,arg1:1,obj:json},call);
         }
     }else if(param.type == -1){
         if(param.itemType == 'set_background'){
@@ -489,20 +489,23 @@ function click(data){
         }
     }else{
         if(data.value == '打开氛围灯' && ver > 1500){
-            setTimeout(function(){get(null,'打开氛围灯',ip+'/send_message',{what:4,arg1:67,arg2:0})},500);
+            setTimeout(function(){get(null,null,'打开氛围灯',ip+'/send_message',{what:4,arg1:67,arg2:0})},500);
         }
-        get(param.succ,data.value,param.url,param.param);
+        get(param.succ_call,param.succ,data.value,param.url,param.param);
 	}
 }
 
 
-function get(tips,type,url,data,call=null){
+function get(succ_call,tips,type,url,data,call=null){
     var text = document.getElementById('text');
     text.value = '['+type+']:请稍后。。。';
     if(call == null){
         call = function(data){
             var text = document.getElementById('text');
             if(data.code == 200){
+                if(succ_call != null){
+                    succ_call();
+                }
 				if(tips != null){
 					text.value = '['+type+']:'+tips;
 				}else{
