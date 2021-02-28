@@ -429,11 +429,13 @@ function start_updateinfo(){
 			vols.value = data.vol;
 			vol_text.innerHTML = '   '+vols.value+'/'+vols.max;
             var tts_speaker = document.getElementById('tts_speaker');
-			for(i=0;i<tts_speaker.length;i++){
-				if(tts_speaker[i].value == data.ttsModelType){
-					tts_speaker[i].selected = 'selected';
-				}
-			}
+            if(tts_speaker){
+			    for(i=0;i<tts_speaker.length;i++){
+			    	if(tts_speaker[i].value == data.ttsModelType){
+			    		tts_speaker[i].selected = 'selected';
+			    	}
+		    	}
+            }
 
             if(ver > 1600 && u_ver > 1600){
                 var music_source = document.getElementById('music_source');
