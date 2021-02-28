@@ -132,6 +132,9 @@ function index(){
 }
 
 function new_index(data){
+    if(data.ver){
+        ver = data.ver;
+    }
 	//首页
 	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱控制页面';
 	var text = document.createElement('text');
@@ -286,6 +289,8 @@ function new_index(data){
 		}
 	}
 	divs.appendChild(btns_div);
+    var ver_div = document.getElementById('ver_div');
+    ver_div.innerHTML = '版本号：'+ver;
 	start_updateinfo();
 }
 
@@ -548,7 +553,7 @@ function load(){
      document.getElementsByTagName("body")[0].appendChild(div);
      var div = document.createElement('div');
      div.id = 'ver_div';
-     div.style = 'position: absolute; bottom:0; right:0;';
+     div.style = 'position: absolute; bottom:0; right:0;color:#FF6347;';
      div.innerHTML = "版本号：";
      document.getElementsByTagName("body")[0].appendChild(div);
 }
