@@ -167,6 +167,7 @@ function new_index(data){
 	texts_div.appendChild(text);
 	var arr = [['萱萱','SWEET'],['小雯','FEMALE'],['糖糖','CHILDREN'],['玲玲','LZL'],['小峰','MALE'],['天天','TIANTIAN']];
 	var tts_speaker = document.createElement('select');
+    tts_speaker.id = 'tts_speaker';
 	tts_speaker.style = 'color: rgb(255, 99, 71); border-radius: 10px; width:50%; background-color: rgba(255, 255, 255, 0.5); font-size: 16px; margin: 15px 10px;';
 	tts_speaker.onchange = function(){
 		update_TtsSpeaker(this.value);
@@ -191,6 +192,7 @@ function new_index(data){
 	    texts_div.appendChild(text);
 	    var arr = [['酷我音乐','kuwo'],['QQ音乐','qq'],['网易云音乐','netease']];
 	    var music_source = document.createElement('select');
+        music_source.id = 'music_source';
 	    music_source.style = 'color: rgb(255, 99, 71); border-radius: 10px; width:50%; background-color: rgba(255, 255, 255, 0.5); font-size: 16px; margin: 15px 10px;';
 	    music_source.onchange = function(){
 	    	set_music_source(this.value);
@@ -324,7 +326,7 @@ function new_index(data){
 }
 
 function set_music_source(source){
-    get('修改音乐源成功！','修改音乐源',ip+'/send_message',{what:65536,arg1:0,arg2:4,obj:value});
+    get('修改音乐源成功！','修改音乐源',ip+'/send_message',{what:65536,arg1:0,arg2:4,obj:source});
 }
 
 function switch_index(){
@@ -418,13 +420,22 @@ function start_updateinfo(){
 			
 			vols.value = data.vol;
 			vol_text.innerHTML = '   '+vols.value+'/'+vols.max;
-			var tts_speaker = document.getElementsByTagName('select')[0];
+            var tts_speaker = document.getElementById('tts_speaker');
 			for(i=0;i<tts_speaker.length;i++){
 				if(tts_speaker[i].value == data.ttsModelType){
 					tts_speaker[i].selected = 'selected';
 				}
 			}
-			
+
+            if(ver > 1600 && u_ver > 1600){
+                var music_source = document.getElementById('music_source');
+                for(i=0;i<music_source.length;i++){
+				    if(music_source[i].value == data.music_source){
+				    	music_source[i].selected = 'selected';
+				    }
+			    }
+            }
+
 	        if(musics_div.style.display != "block"){
 		        return;
 	        }
