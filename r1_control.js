@@ -133,10 +133,10 @@ function index(){
 
 function new_index(data){
     var u_ver = 1000;
-    if(data.ver){
+    if(data.ver != null){
         ver = data.ver;
     }
-    if(data.u_ver){
+    if(data.u_ver != null){
         u_ver = data.u_ver;
     }
 	//首页
@@ -209,8 +209,8 @@ function new_index(data){
 	    }
 	    texts_div.appendChild(music_source);
 	    texts_div.appendChild(document.createElement('br'));
-	    divs.appendChild(texts_div);
     }
+    divs.appendChild(texts_div);
 	//音乐
 	musics_div.style = 'display: none;';
     music_pic.id= 'music_pic';
@@ -418,18 +418,18 @@ function start_updateinfo(){
 			}
 			data = JSON.parse(data.data);
 			var u_ver = 1000;
-            if(data.ver){
+            if(data.ver != null){
                 ver = data.ver;
                  var ver_div = document.getElementById('ver_div');
                  ver_div.innerHTML = '版本号：'+ver;
             }
-            if(data.u_ver){
+            if(data.u_ver != null){
                 u_ver = data.u_ver;
             }
 			vols.value = data.vol;
 			vol_text.innerHTML = '   '+vols.value+'/'+vols.max;
             var tts_speaker = document.getElementById('tts_speaker');
-            if(tts_speaker){
+            if(tts_speaker != null){
 			    for(i=0;i<tts_speaker.length;i++){
 			    	if(tts_speaker[i].value == data.ttsModelType){
 			    		tts_speaker[i].selected = 'selected';
