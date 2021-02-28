@@ -132,8 +132,12 @@ function index(){
 }
 
 function new_index(data){
+    var u_ver = 1000;
     if(data.ver){
         ver = data.ver;
+    }
+    if(data.u_ver){
+        u_ver = data.u_ver;
     }
 	//首页
 	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱控制页面';
@@ -161,7 +165,7 @@ function new_index(data){
 	text.style = 'color:#FF6347;';
 	text.innerHTML = '修改发音人：';
 	texts_div.appendChild(text);
-	var arr = [['萱萱','SWEET'],['小雯','FEMALE'],['糖糖','CHILDREN'],['玲玲','LZL'],['小峰','MALE'],['天天','TIANTIAN']]
+	var arr = [['萱萱','SWEET'],['小雯','FEMALE'],['糖糖','CHILDREN'],['玲玲','LZL'],['小峰','MALE'],['天天','TIANTIAN']];
 	var tts_speaker = document.createElement('select');
 	tts_speaker.style = 'color: rgb(255, 99, 71); border-radius: 10px; width:50%; background-color: rgba(255, 255, 255, 0.5); font-size: 16px; margin: 15px 10px;';
 	tts_speaker.onchange = function(){
@@ -179,7 +183,32 @@ function new_index(data){
 	}
 	texts_div.appendChild(tts_speaker);
 	texts_div.appendChild(document.createElement('br'));
-	divs.appendChild(texts_div);
+
+    if(ver > 1600 && u_ver > 1600){
+        var text = document.createElement('text');
+	    text.style = 'color:#FF6347;';
+	    text.innerHTML = '修改音乐源：';
+	    texts_div.appendChild(text);
+	    var arr = [['酷我音乐','kuwo'],['QQ音乐','qq'],['网易云音乐','netease']];
+	    var music_source = document.createElement('select');
+	    music_source.style = 'color: rgb(255, 99, 71); border-radius: 10px; width:50%; background-color: rgba(255, 255, 255, 0.5); font-size: 16px; margin: 15px 10px;';
+	    music_source.onchange = function(){
+	    	set_music_source(this.value);
+	    }
+	    for(var i=0;i<arr.length;i++){
+	    	var option = document.createElement('option');
+	    	option.innerHTML = arr[i][0];
+	    	option.value = arr[i][1];
+
+	    	if(option.value == data.music_source{
+		    	option.selected = 'selected';
+	    	}
+	    	music_source.appendChild(option);
+	    }
+	    texts_div.appendChild(music_source);
+	    texts_div.appendChild(document.createElement('br'));
+	    divs.appendChild(texts_div);
+    }
 	//音乐
 	musics_div.style = 'display: none;';
     music_pic.id= 'music_pic';
@@ -292,6 +321,10 @@ function new_index(data){
     var ver_div = document.getElementById('ver_div');
     ver_div.innerHTML = '版本号：'+ver;
 	start_updateinfo();
+}
+
+function set_music_source(source){
+    get('修改音乐源成功！','修改音乐源',ip+'/send_message',{what:65536,arg1:0,arg2:4,obj:value});
 }
 
 function switch_index(){
