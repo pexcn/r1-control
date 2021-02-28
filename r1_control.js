@@ -417,7 +417,15 @@ function start_updateinfo(){
 				return;
 			}
 			data = JSON.parse(data.data);
-			
+			var u_ver = 1000;
+            if(data.ver){
+                ver = data.ver;
+                 var ver_div = document.getElementById('ver_div');
+                 ver_div.innerHTML = '版本号：'+ver;
+            }
+            if(data.u_ver){
+                u_ver = data.u_ver;
+            }
 			vols.value = data.vol;
 			vol_text.innerHTML = '   '+vols.value+'/'+vols.max;
             var tts_speaker = document.getElementById('tts_speaker');
