@@ -459,7 +459,7 @@ function start_updateinfo(){
 			}
 			
 			var music_btn_play = document.getElementById('music_btn_play');
-            if(data.music_info){
+            if(data.music_info != null){
                 if(data.play_state || data.music_info.state != 2){
 				    music_pic.style.webkitAnimationPlayState = "running";
                     music_btn_play.value = '暂停';
@@ -469,6 +469,17 @@ function start_updateinfo(){
 				    music_btn_play.value = '播放';
                     music_btn_play.setAttribute('data','play');
                 }
+                if(music_id != music_info.id){
+					music_id = music_info.id;
+					//music_pic.src = 'https://service-8knxpnnt-1256217539.cd.apigw.tencentcs.com/release/xiaofei?pic='+music_id;
+                    music_pic.src = 'http://118.24.119.65/music1.php?pic='+music_id;
+					update_list();
+				}
+				music_time.max = music_info.duration;
+				music_time.value = music_info.position;
+				music_time_duration.innerText = m_to_is(music_time.max);
+				music_time_position.innerText = m_to_is(music_time.value);
+				document.getElementsByTagName('h3')[0].innerHTML = '正在播放：'+music_info.title+'-'+music_info.arist;
             }else{
                 if(data.play_state){
 				    music_pic.style.webkitAnimationPlayState = "running";
@@ -480,21 +491,6 @@ function start_updateinfo(){
                     music_btn_play.setAttribute('data','play');
                 }
             }
-			
-			if(data.music_info != null){
-				if(music_id != music_info.id){
-					music_id = music_info.id;
-					//music_pic.src = 'https://service-8knxpnnt-1256217539.cd.apigw.tencentcs.com/release/xiaofei?pic='+music_id;
-                    music_pic.src = 'http://118.24.119.65/music1.php?pic='+music_id;
-					update_list();
-				}
-				music_time.max = music_info.duration;
-				music_time.value = music_info.position;
-				music_time_duration.innerText = m_to_is(music_time.max);
-				music_time_position.innerText = m_to_is(music_time.value);
-				document.getElementsByTagName('h3')[0].innerHTML = '正在播放：'+music_info.title+'-'+music_info.arist;
-				
-			}
 		};
 	timer = setInterval(function(){$.ajax({type:'GET',url:ip+'/get_info',dataType:'jsonp',success:success})},1000);
 }
