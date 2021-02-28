@@ -459,15 +459,28 @@ function start_updateinfo(){
 			}
 			
 			var music_btn_play = document.getElementById('music_btn_play');
-			if(data.play_state || data.music_info.state != 2){
-				music_pic.style.webkitAnimationPlayState = "running";
-			    music_btn_play.value = '暂停';
-			    music_btn_play.setAttribute('data','pause');
-			}else{
-				music_pic.style.webkitAnimationPlayState = "paused";
-				music_btn_play.value = '播放';
-			    music_btn_play.setAttribute('data','play');
-			}
+            if(data.music_info){
+                if(data.play_state || data.music_info.state != 2){
+				    music_pic.style.webkitAnimationPlayState = "running";
+                    music_btn_play.value = '暂停';
+                    music_btn_play.setAttribute('data','pause');
+                }else{
+                    music_pic.style.webkitAnimationPlayState = "paused";
+				    music_btn_play.value = '播放';
+                    music_btn_play.setAttribute('data','play');
+                }
+            }else{
+                if(data.play_state){
+				    music_pic.style.webkitAnimationPlayState = "running";
+                    music_btn_play.value = '暂停';
+                    music_btn_play.setAttribute('data','pause');
+                }else{
+                    music_pic.style.webkitAnimationPlayState = "paused";
+				    music_btn_play.value = '播放';
+                    music_btn_play.setAttribute('data','play');
+                }
+            }
+			
 			if(data.music_info != null){
 				if(music_id != music_info.id){
 					music_id = music_info.id;
