@@ -200,7 +200,7 @@ function new_index(data){
 	    	option.innerHTML = arr[i][0];
 	    	option.value = arr[i][1];
 
-	    	if(option.value == data.music_source{
+	    	if(option.value == data.music_source){
 		    	option.selected = 'selected';
 	    	}
 	    	music_source.appendChild(option);
