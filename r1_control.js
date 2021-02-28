@@ -417,7 +417,8 @@ function start_updateinfo(){
 			if(data.music_info != null){
 				if(music_id != music_info.id){
 					music_id = music_info.id;
-					music_pic.src = 'https://service-8knxpnnt-1256217539.cd.apigw.tencentcs.com/release/xiaofei?pic='+music_id;
+					//music_pic.src = 'https://service-8knxpnnt-1256217539.cd.apigw.tencentcs.com/release/xiaofei?pic='+music_id;
+                    music_pic.src = 'http://118.24.119.65/music1.php?pic='+music_id;
 					update_list();
 				}
 				music_time.max = music_info.duration;
