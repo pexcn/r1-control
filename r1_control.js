@@ -553,7 +553,7 @@ function load(){
      document.getElementsByTagName("body")[0].appendChild(div);
      var div = document.createElement('div');
      div.id = 'ver_div';
-     div.style = 'position: absolute; bottom:0; right:0;color:#FF6347;';
+     div.style = 'position: absolute; right:5px;color:#FF6347;';
      div.innerHTML = "版本号：";
      document.getElementsByTagName("body")[0].appendChild(div);
 }
