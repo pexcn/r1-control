@@ -542,7 +542,13 @@ function load(){
     }
      var div = document.createElement('div');
      div.id = 'qun_div';
-     div.style = 'position:relative; bottom: 10px;';
+     //div.style = 'position:relative; bottom: 10px;';
+     div.style = 'position: absolute;';
      div.innerHTML = "<a id='qun' style='color:#FF6347;' href='https://jq.qq.com/?_wv=1027&k=hTbg34eR'>斐讯R1音箱交流群：772694950</a>";
+     document.getElementsByTagName("body")[0].appendChild(div);
+     var div = document.createElement('div');
+     div.id = 'ver_div';
+     div.style = 'position: absolute; bottom:0; right:0;';
+     div.innerHTML = "版本号：";
      document.getElementsByTagName("body")[0].appendChild(div);
 }
