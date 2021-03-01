@@ -23,7 +23,7 @@ var list = document.createElement('table');
 var vol_text = document.createElement('text');
 var buttons = [['点播音乐',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'播放${obj}'},type:1,min_ver:1600,err:'请输入要点播的音乐！',succ:'点播成功！'}],
 ['点播电台',{url:ip+'/send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'收听${obj}'},type:1,min_ver:1600,err:'请输入要点播的音乐！',succ:'点播成功！'}],
-['打开蓝牙',{url:ip+'/send_message',param:{what:64,arg1:1,arg2:-1},type:0,succ:'已开启蓝牙！'}],
+['打开蓝牙',{url:ip+'/send_message',param:{what:256,arg1:3,arg2:-1},type:0,succ:'已开启蓝牙！'}],
 ['关闭蓝牙',{url:ip+'/send_message',param:{what:64,arg1:2,arg2:-1},type:0,succ:'已关闭蓝牙！'}],
 ['打开氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:1},type:0,succ:'已开启氛围灯！'}],
 ['关闭氛围灯',{url:ip+'/send_message',param:{what:4,arg1:64,arg2:0},type:0,succ:'已关闭氛围灯！'}],
