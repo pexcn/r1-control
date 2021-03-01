@@ -373,19 +373,26 @@ function update_list(){
 				tr.setAttribute('playing',false);
 			}
 			tr.onclick  = function(){
-				console.log(this);
 				if(this.getAttribute('playing') == 'true'){
 					return;
 				}
 				get(null,'播放指定歌曲',ip+'/play',{index:this.getAttribute('index')});
 			};
 			var span = document.createElement('span');
-			span.innerHTML = (i+1)+'.'+data.playList[i].title+'-'+data.playList[i].artist;
+            if(data.playList[i].artist){
+			    span.innerHTML = (i+1)+'.'+data.playList[i].title+'-'+data.playList[i].artist;
+            }else if(data.playList[i].album){
+                span.innerHTML = (i+1)+'.'+data.playList[i].title+'-'+data.playList[i].album;
+            }else{
+                span.innerHTML = (i+1)+'.'+data.playList[i].title;
+            }
 			tr.setAttribute('index',i);
 			tr.appendChild(span);
 			list.appendChild(tr);
 		}
-		lists.scrollTop = list.getElementsByTagName('tr')[data.playIndex].offsetTop;
+        if(data.playIndex>-1){
+            lists.scrollTop = list.getElementsByTagName('tr')[data.playIndex].offsetTop;
+        }
 	}});
 	
 }
@@ -479,7 +486,12 @@ function start_updateinfo(){
 				music_time.value = music_info.position;
 				music_time_duration.innerText = m_to_is(music_time.max);
 				music_time_position.innerText = m_to_is(music_time.value);
-				document.getElementsByTagName('h3')[0].innerHTML = '正在播放：'+music_info.title+'-'+music_info.arist;
+                if(music_info.arist){
+                    var title = music_info.title+'-'+music_info.arist;
+                }else{
+                    var title = music_info.title;
+                }
+				document.getElementsByTagName('h3')[0].innerHTML = '正在播放：'+title;
             }else{
                 if(data.play_state){
 				    music_pic.style.webkitAnimationPlayState = "running";
