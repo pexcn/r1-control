@@ -379,9 +379,9 @@ function update_list(){
 				get(null,'播放指定歌曲',ip+'/play',{index:this.getAttribute('index')});
 			};
 			var span = document.createElement('span');
-            if(data.playList[i].artist != undefined){
+            if(data.playList[i].artist){
 			    span.innerHTML = (i+1)+'.'+data.playList[i].title+'-'+data.playList[i].artist;
-            }else if(data.playList[i].album  != undefined){
+            }else if(data.playList[i].album ){
                 span.innerHTML = (i+1)+'.'+data.playList[i].title+'-'+data.playList[i].album;
             }else{
                 span.innerHTML = (i+1)+'.'+data.playList[i].title;
