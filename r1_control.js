@@ -495,9 +495,8 @@ function start_updateinfo(){
             }else{
                 if(music_id != null){
                     music_id = null;
-                    update_list();
+                    list.innerHTML = '';
                 }
-
                 if(data.play_state){
 				    music_pic.style.webkitAnimationPlayState = "running";
                     music_btn_play.value = '暂停';
