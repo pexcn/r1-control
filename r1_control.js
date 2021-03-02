@@ -496,6 +496,8 @@ function start_updateinfo(){
                 if(music_id != null){
                     music_id = null;
                     list.innerHTML = '';
+                    document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱音乐控制页面';
+                    music_pic.src = '';
                 }
                 if(data.play_state){
 				    music_pic.style.webkitAnimationPlayState = "running";
