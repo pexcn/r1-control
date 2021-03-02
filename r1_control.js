@@ -466,7 +466,7 @@ function start_updateinfo(){
 			}
 			
 			var music_btn_play = document.getElementById('music_btn_play');
-            if(data.music_info != null){
+            if(music_info != null){
                 if(data.play_state || data.music_info.state != 2){
 				    music_pic.style.webkitAnimationPlayState = "running";
                     music_btn_play.value = '暂停';
@@ -493,6 +493,11 @@ function start_updateinfo(){
                 }
 				document.getElementsByTagName('h3')[0].innerHTML = '正在播放：'+title;
             }else{
+                if(music_id != null){
+                    music_id = null;
+                    update_list();
+                }
+
                 if(data.play_state){
 				    music_pic.style.webkitAnimationPlayState = "running";
                     music_btn_play.value = '暂停';
