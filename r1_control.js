@@ -274,7 +274,6 @@ function new_index(data){
 	div_list.style = 'display:none;';
 	div_list.appendChild(text);
 	div_list.appendChild(lists);
-	divs.appendChild(div_list);
 	lists.style = 'margin: 10px auto;max-width:600px;max-height:500px;border-radius:15px;overflow-x:hidden;overflow-y:auto;background-color: rgba(0, 0, 0, 0.5);';
 	list.setAttribute('border','0');
 	list.setAttribute('cellspacing','0');
@@ -301,6 +300,7 @@ function new_index(data){
 		divs.appendChild(btn);
 	}
 	divs.appendChild(document.createElement('br'));
+    divs.appendChild(div_list);
 	for(var i=0;i<buttons.length;i++){
         if(buttons[i][1].min_ver == null){
             buttons[i][1].min_ver = ver;
