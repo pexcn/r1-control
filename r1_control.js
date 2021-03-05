@@ -427,15 +427,15 @@ function start_updateinfo(){
 			}
 			data = JSON.parse(data.data);
 			var u_ver = 1000;
-            if(data.ver != null){
-                ver = data.ver;
-                 var ver_div = document.getElementById('ver_div');
-                 ver_div.innerHTML = '版本号：'+ver;
-            }
             if(data.u_ver != null){
                 u_ver = data.u_ver;
             }
-            document.getElementById('ver_div').onclick = 'alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'")';
+            if(data.ver != null){
+                ver = data.ver;
+                 var ver_div = document.getElementById('ver_div');
+                 ver_div.innerHTML = '<span onclick="alert(‘new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'’)">版本号：'+ver+'</span>';
+            }
+            
 			vols.value = data.vol;
 			vol_text.innerHTML = '   '+vols.value+'/'+vols.max;
             var tts_speaker = document.getElementById('tts_speaker');
