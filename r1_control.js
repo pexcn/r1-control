@@ -322,8 +322,6 @@ function new_index(data){
 		}
 	}
 	divs.appendChild(btns_div);
-    var ver_div = document.getElementById('ver_div');
-    ver_div.innerHTML = '版本号：'+ver;
 	start_updateinfo();
 }
 
@@ -433,7 +431,7 @@ function start_updateinfo(){
             if(data.ver != null){
                 ver = data.ver;
                  var ver_div = document.getElementById('ver_div');
-                 ver_div.innerHTML = '<a href="alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'")">版本号：'+ver+'</a>';
+                 ver_div.innerHTML = '<a style="color:#FF6347;" href=‘javascript:alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'");’>版本号：'+ver+'</a>';
             }
             
 			vols.value = data.vol;
