@@ -4,7 +4,7 @@ if(!ip){
 if(!ver){
     var ver = 1000;
 }
-
+var u_ver = 1000;
 var music_id = '';
 var timer = -1;
 var h3 = document.getElementsByTagName('h3')[0];
@@ -321,6 +321,8 @@ function new_index(data){
 		    btns_div.appendChild(btn);
 		}
 	}
+    var ver_div = document.getElementById('ver_div');
+    ver_div.innerHTML = '<a style="color:#FF6347;" href="javascript:alert(get_ver());">版本号：'+ver+'</a>';
 	divs.appendChild(btns_div);
 	start_updateinfo();
 }
@@ -424,14 +426,13 @@ function start_updateinfo(){
 				return;
 			}
 			data = JSON.parse(data.data);
-			var u_ver = 1000;
             if(data.u_ver != null){
                 u_ver = data.u_ver;
             }
             if(data.ver != null){
                 ver = data.ver;
                  var ver_div = document.getElementById('ver_div');
-                 ver_div.innerHTML = '<a style="color:#FF6347;" href=javascript:alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'");>版本号：'+ver+'</a>';
+                 ver_div.innerHTML = '<a style="color:#FF6347;" href="javascript:alert(get_ver());">版本号：'+ver+'</a>';
             }
             
 			vols.value = data.vol;
