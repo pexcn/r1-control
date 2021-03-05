@@ -134,7 +134,6 @@ function index(){
 }
 
 function new_index(data){
-    var u_ver = 1000;
     if(data.ver != null){
         ver = data.ver;
     }
@@ -325,6 +324,10 @@ function new_index(data){
     ver_div.innerHTML = '<a style="color:#FF6347;" href="javascript:alert(get_ver());">版本号：'+ver+'</a>';
 	divs.appendChild(btns_div);
 	start_updateinfo();
+}
+
+function get_ver(){
+    return "new_EchoService版本："+ver+"\r\nnew_Unisound版本："+u_ver;
 }
 
 function set_music_source(source){
