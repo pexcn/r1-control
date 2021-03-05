@@ -435,11 +435,7 @@ function start_updateinfo(){
             if(data.u_ver != null){
                 u_ver = data.u_ver;
             }
-
-            div.onclick = function(){
-                var ver_div = document.getElementById('ver_div');
-                ver_div.click = 'alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'")';
-            }
+            document.getElementById('ver_div').click = 'alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'")';
 			vols.value = data.vol;
 			vol_text.innerHTML = '   '+vols.value+'/'+vols.max;
             var tts_speaker = document.getElementById('tts_speaker');
