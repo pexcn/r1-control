@@ -639,6 +639,5 @@ function load(){
      var div = document.createElement('div');
      div.id = 'ver_div';
      div.style = 'position: absolute; right:5px;color:#FF6347;';
-     div.innerHTML = "版本号：";
      document.getElementsByTagName("body")[0].appendChild(div);
 }
