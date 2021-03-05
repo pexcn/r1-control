@@ -433,7 +433,8 @@ function start_updateinfo(){
             if(data.ver != null){
                 ver = data.ver;
                  var ver_div = document.getElementById('ver_div');
-                 ver_div.innerHTML = '<span onclick="alert(‘new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'’)">版本号：'+ver+'</span>';
+                 
+                 ver_div.innerHTML = '<a style="color:#FF6347" href="alert("new_EchoService版本：'+ver+'\r\nnew_Unisound版本：'+u_ver+'")">版本号：'+ver+'</a>';
             }
             
 			vols.value = data.vol;
