@@ -7,6 +7,8 @@ if(!ver){
 var u_ver = 1000;
 var music_id = '';
 var timer = -1;
+var screen_timer = -1;
+var screen_div = document.createElement('div');
 var h3 = document.getElementsByTagName('h3')[0];
 var divs = document.createElement('div');
 var texts_div = document.createElement('div');
@@ -186,6 +188,7 @@ function new_index(data){
 	texts_div.appendChild(tts_speaker);
 	texts_div.appendChild(document.createElement('br'));
 
+
     if(ver > 1600 && u_ver > 1600){
         var text = document.createElement('text');
 	    text.style = 'color:#FF6347;';
@@ -212,6 +215,54 @@ function new_index(data){
 	    texts_div.appendChild(document.createElement('br'));
     }
     divs.appendChild(texts_div);
+    //屏幕控制
+	if(ver > 1000){
+		screen_div.style = 'display:none;';
+		var img = document.createElement('img');
+		img.id = 'screen_img';
+		img.style = 'max-width:100%;height: auto;';
+		img.onclick=function(e){
+			x = e.offsetX;
+			y = e.offsetY;
+			x = (x/this.clientWidth)*720;
+			y = (y/this.clientHeight)*480;
+			$.ajax({type:'GET',
+			url:'http://192.168.6.125:8080/shell',
+			dataType:'jsonp',
+			data:{shell:'input tap '+x+' '+y},
+			success:function(data){}});
+		};
+		screen_div.appendChild(img);
+		screen_div.appendChild(document.createElement('br'));
+		var arr = [['上',19],['左',21],['确定',23],['右',22],['下',20]];
+		for(var i=0;i<arr.length;i++){
+			var btn = document.createElement("input");
+			btn.type = 'button';
+			btn.className = 'btn';
+			btn.value = arr[i][0];
+			btn.setAttribute('data',arr[i][1]);
+			btn.onclick = function(){
+			send_keyevent(this.getAttribute('data'));
+			};
+			screen_div.appendChild(btn);
+		}
+		screen_div.appendChild(document.createElement('br'));
+		var arr = [['返回',4]];
+		for(var i=0;i<arr.length;i++){
+			var btn = document.createElement("input");
+			btn.type = 'button';
+			btn.className = 'btn';
+			btn.value = arr[i][0];
+			btn.setAttribute('data',arr[i][1]);
+			btn.onclick = function(){
+				send_keyevent(this.getAttribute('data'));
+			};
+			screen_div.appendChild(btn);
+		}
+		divs.append(screen_div);
+		divs.append(document.createElement('br'));
+	}
+
 	//音乐
 	musics_div.style = 'display: none;';
     music_pic.id= 'music_pic';
@@ -280,26 +331,21 @@ function new_index(data){
 	list.setAttribute("style", "color:#FF6347;margin: 5px auto;");
 	lists.appendChild(list);
 	//按钮
-	var arr = [['切换音乐']];
+	var arr = [['音乐页面'],['屏幕控制']];
 	for(var i=0;i<arr.length;i++){
 		var btn = document.createElement("input");
-		btn.id = 'music_btn_'+i;
+		btn.id = 'btn_'+i;
 		btn.type = 'button';
 		btn.className = 'btn';
 		btn.value = arr[i][0];
-		btn.setAttribute('data',arr[i][1]);
+		btn.setAttribute('data',arr[i][0]);
 		btn.onclick = function(){
-			if(texts_div.style.display != 'none'){
-				switch_music();
-			}else{
-				switch_index();
-			}
-			
+			switch_page(this);
 		};
 		divs.appendChild(btn);
 	}
 	divs.appendChild(document.createElement('br'));
-    divs.appendChild(div_list);
+	divs.appendChild(div_list);
 	for(var i=0;i<buttons.length;i++){
         if(buttons[i][1].min_ver == null){
             buttons[i][1].min_ver = ver;
@@ -326,32 +372,97 @@ function new_index(data){
 	start_updateinfo();
 }
 
+function send_keyevent(key){
+    $.ajax({type:'GET',
+	url:ip+'/shell',
+	dataType:'jsonp',
+	data:{shell:'input keyevent '+key},
+	success:function(data){}});
+}
+
+function switch_page(data){
+	title = data.getAttribute('data');
+	if(data.id == 'btn_0'){
+		if(data.value != title){
+			hide_music();
+			onhide_index();
+		}else{
+			hide_index();
+			onhide_music();
+			update_list();
+			
+		}
+	}else if(data.id == 'btn_1'){
+		if(data.value != title){
+			hide_screen();
+			onhide_index();
+		}else{
+			hide_index();
+			hide_music();
+			onhide_screen();
+		}
+	}
+	
+	if(data.value != title){
+		data.value = title;
+	}else{
+		data.value = '返回首页';
+	}
+}
+
+function onhide_index(){
+	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱控制页面';
+	texts_div.style.display = "block";
+	btns_div.style.display = "block";
+}
+
+function hide_index(){
+	texts_div.style.display = "none";
+	btns_div.style.display = "none";
+}
+
+function onhide_music(){
+	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱音乐控制页面';
+	musics_div.style.display = "block";
+	div_list.style.display = "block";
+}
+
+function hide_music(){
+	musics_div.style.display = "none";
+	div_list.style.display = "none";
+}
+
+function onhide_screen(){
+	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱屏幕控制页面';
+	screen_div.style.display = "block";
+	start_screen();
+}
+
+function hide_screen(){
+	screen_div.style.display = "none";
+	stop_screen();
+}
+
+function start_screen(){
+	screen_timer = setInterval('update_screencap()',300);
+}
+
+function stop_screen(){
+	clearInterval(screen_timer);
+	screen_timer = -1;
+}
+
+
+function update_screencap(){
+	document.getElementById('screen_img').src = ip+'/screencap?t='+new Date().getTime();
+}
+
 function get_ver(){
     return "new_EchoService版本："+ver+"\r\nnew_Unisound版本："+u_ver;
 }
 
 function set_music_source(source){
     get('修改音乐源成功！','修改音乐源',ip+'/send_message',{what:65536,arg1:0,arg2:4,obj:source});
-}
-
-function switch_index(){
-    document.getElementById('music_btn_0').value = '切换音乐';
-	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱控制页面';
-	musics_div.style.display = "none";
-	div_list.style.display = "none";
-	texts_div.style.display = "block";
-	btns_div.style.display = "block";
-}
-
-function switch_music(){
-    document.getElementById('music_btn_0').value = '切换首页';
-	document.getElementsByTagName('h3')[0].innerHTML = 'R1音箱音乐控制页面';
-	texts_div.style.display = "none";
-	btns_div.style.display = "none";
-	musics_div.style.display = "block";
-	div_list.style.display = "block";
-	update_list();
-	
 }
 
 function update_list(){
