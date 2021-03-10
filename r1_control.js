@@ -389,6 +389,7 @@ function switch_page(data){
 			onhide_index();
 		}else{
 			hide_index();
+            hide_screen();
 			onhide_music();
 			update_list();
 			
