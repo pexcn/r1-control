@@ -227,7 +227,7 @@ function new_index(data){
 			x = (x/this.clientWidth)*720;
 			y = (y/this.clientHeight)*480;
 			$.ajax({type:'GET',
-			url:'http://192.168.6.125:8080/shell',
+			url:ip+'/shell',
 			dataType:'jsonp',
 			data:{shell:'input tap '+x+' '+y},
 			success:function(data){}});
