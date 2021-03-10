@@ -385,6 +385,7 @@ function switch_page(data){
 	if(data.id == 'btn_0'){
 		if(data.value != title){
 			hide_music();
+            hide_screen();
 			onhide_index();
 		}else{
 			hide_index();
@@ -395,6 +396,7 @@ function switch_page(data){
 	}else if(data.id == 'btn_1'){
 		if(data.value != title){
 			hide_screen();
+            hide_music();
 			onhide_index();
 		}else{
 			hide_index();
