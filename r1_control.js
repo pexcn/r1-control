@@ -271,7 +271,7 @@ function new_index(data){
 	musics_div.appendChild(music_pic);
 	musics_div.appendChild(document.createElement('br'));
 	music_time_position.style = 'color:#FF6347;';
-	music_time_position.innerHTML = '00:00:00 ';
+	music_time_position.innerHTML = '00:00 ';
 	musics_div.appendChild(music_time_position);
 	music_time.type = 'range';
     music_time.min = 0;
@@ -281,7 +281,7 @@ function new_index(data){
     //music_time.addEventListener('input', function() {vol_text.innerHTML = '   '+this.value+'/'+this.max;$.ajax({type:'GET',url:ip+'/set_vol',dataType:'jsonp',data:{'vol':this.value}})});
 	musics_div.appendChild(music_time);
 	music_time_duration.style = 'color:#FF6347;';
-	music_time_duration.innerHTML = ' 00:00:00';
+	music_time_duration.innerHTML = ' 00:00';
 	musics_div.appendChild(music_time_duration);
 	musics_div.appendChild(document.createElement('br'));
 	var arr = [['上一首','prev'],['播放','play'],['下一首','next']];
@@ -306,11 +306,11 @@ function new_index(data){
 		btn.type = 'button';
 		btn.className = 'btn';
 		btn.value = arr[i][0];
-		arr = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
-		playmode = arr[0];
-		for(i=0;i<arr.length;i++){
-			if(arr[i][1] == data.play_mode){
-				playmode = arr[i];
+		arr1 = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
+		playmode = arr1[0];
+		for(i=0;i<arr1.length;i++){
+			if(arr1[i][1] == data.play_mode){
+				playmode = arr1[i];
 			}
 		}
 		btn.setAttribute('mode',playmode[1]);
