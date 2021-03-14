@@ -299,6 +299,37 @@ function new_index(data){
 		musics_div.appendChild(btn);
 	}
 	musics_div.appendChild(document.createElement('br'));
+    var arr = [['随机播放','playmode']];
+	for(var i=0;i<arr.length;i++){
+		var btn = document.createElement("input");
+		btn.id = 'music_btn_'+arr[i][1];
+		btn.type = 'button';
+		btn.className = 'btn';
+		btn.value = arr[i][0];
+		arr = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
+		playmode = arr[0];
+		for(i=0;i<arr.length;i++){
+			if(arr[i][1] == data.play_mode){
+				playmode = arr[i];
+			}
+		}
+		btn.setAttribute('mode',playmode[1]);
+		btn.value = playmode[0];
+		btn.onclick = function(){
+			arr = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
+			mode = parseInt(this.getAttribute('mode'))+1;
+			playmode = arr[0];
+			for(i=0;i<arr.length;i++){
+				if(arr[i][1] == mode){
+					playmode = arr[i];
+				}
+			}
+			this.setAttribute('mode',playmode[1]);
+			this.value = playmode[0];
+			$.ajax({type:'GET',url:ip+'/set_play_mode',dataType:'jsonp',data:{mode:playmode[1]},success:function(data){}});
+		};
+		musics_div.appendChild(btn);
+	}
 	divs.appendChild(musics_div);
 	//音量
     var text = document.createElement('text');
@@ -570,6 +601,16 @@ function start_updateinfo(){
 				    	music_source[i].selected = 'selected';
 				    }
 			    }
+                arr = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
+                playmode = arr[0];
+                for(i=0;i<arr.length;i++){
+                    if(arr[i][1] == data.play_mode){
+                        playmode = arr[i];
+                    }
+                }
+                btn = document.getElementById('music_btn_playmode');
+                btn.setAttribute('mode',playmode[1]);
+                btn.value = playmode[0];
             }
 
 	        if(musics_div.style.display != "block"){
@@ -598,7 +639,7 @@ function start_updateinfo(){
                 if(music_id != music_info.id){
 					music_id = music_info.id;
 					//music_pic.src = 'https://service-8knxpnnt-1256217539.cd.apigw.tencentcs.com/release/xiaofei?pic='+music_id;
-                    music_pic.src = 'http://118.24.119.65:86/music/?pic='+music_id;
+                    music_pic.src = 'http://wxfsq.com:86/music/?pic='+music_id;
 					update_list();
 				}
 				music_time.max = music_info.duration;
