@@ -324,8 +324,8 @@ function new_index(data){
 					playmode = arr[i];
 				}
 			}
-			this.setAttribute('mode',playmode[1]);
-			this.value = playmode[0];
+			//this.setAttribute('mode',playmode[1]);
+			//this.value = playmode[0];
 			$.ajax({type:'GET',url:ip+'/set_play_mode',dataType:'jsonp',data:{mode:playmode[1]},success:function(data){}});
 		};
 		musics_div.appendChild(btn);
