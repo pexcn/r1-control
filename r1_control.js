@@ -299,35 +299,42 @@ function new_index(data){
 		musics_div.appendChild(btn);
 	}
 	musics_div.appendChild(document.createElement('br'));
-    var arr = [['随机播放','playmode']];
+    var arr = [['收藏歌曲','collect'],['随机播放','playmode'],['取消收藏','cancel_collect']];
 	for(var i=0;i<arr.length;i++){
 		var btn = document.createElement("input");
 		btn.id = 'music_btn_'+arr[i][1];
 		btn.type = 'button';
 		btn.className = 'btn';
 		btn.value = arr[i][0];
-		arr1 = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
-		playmode = arr1[0];
-		for(i=0;i<arr1.length;i++){
-			if(arr1[i][1] == data.play_mode){
-				playmode = arr1[i];
-			}
-		}
-		btn.setAttribute('mode',playmode[1]);
-		btn.value = playmode[0];
-		btn.onclick = function(){
-			arr = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
-			mode = parseInt(this.getAttribute('mode'))+1;
-			playmode = arr[0];
-			for(i=0;i<arr.length;i++){
-				if(arr[i][1] == mode){
-					playmode = arr[i];
+		if(arr[i][1] == 'playmode'){
+			arr1 = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
+			playmode = arr1[0];
+			for(ii=0;ii<arr1.length;ii++){
+				if(arr1[ii][1] == data.play_mode){
+					playmode = arr1[ii];
 				}
 			}
-			//this.setAttribute('mode',playmode[1]);
-			//this.value = playmode[0];
-			$.ajax({type:'GET',url:ip+'/set_play_mode',dataType:'jsonp',data:{mode:playmode[1]},success:function(data){}});
-		};
+			btn.setAttribute('mode',playmode[1]);
+			btn.value = playmode[0];
+			btn.onclick = function(){
+				arr1 = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
+				mode = parseInt(this.getAttribute('mode'))+1;
+				playmode = arr1[0];
+				for(i=0;i<arr1.length;i++){
+					if(arr1[i][1] == mode){
+						playmode = arr1[i];
+					}
+				}
+				this.setAttribute('mode',playmode[1]);
+				this.value = playmode[0];
+				$.ajax({type:'GET',url:ip+'/set_play_mode',dataType:'jsonp',data:{mode:playmode[1]},success:function(data){}});
+			};
+		}else{
+			btn.setAttribute('data',arr[i][1]);
+			btn.onclick = function(){
+				send_music_cmd(this);
+			};
+		}
 		musics_div.appendChild(btn);
 	}
 	divs.appendChild(musics_div);
@@ -551,18 +558,22 @@ function send_music_cmd(data){
 	type = data.getAttribute('data');
 	if(type == 'prev'){
 		get(null,'上一首',ip+'/prev',{});
-		//get('上一首',ip+'/send_message',{what:4,arg1:5,arg2:0});
-		//setTimeout(function(){get('上一首',ip+'/send_message',{what:4,arg1:3,arg2:0});},500);
+		//get(null,'上一首',ip+'/send_message',{what:4,arg1:5,arg2:0});
+		//setTimeout(function(){get(null,'上一首',ip+'/send_message',{what:4,arg1:3,arg2:0});},500);
 	}else if(type == 'next'){
 		get(null,'下一首',ip+'/next',{});
-		//get('下一首',ip+'/send_message',{what:4,arg1:6,arg2:0});
-		//setTimeout(function(){get('下一首',ip+'/send_message',{what:4,arg1:3,arg2:0});},500);
+		//get(null,'下一首',ip+'/send_message',{what:4,arg1:6,arg2:0});
+		//setTimeout(function(){get(null,'下一首',ip+'/send_message',{what:4,arg1:3,arg2:0});},500);
 	}else if(type == 'pause'){
-		//get('暂停',ip+'/pause',{});
+		//get(null,'暂停',ip+'/pause',{});
 		get(null,'暂停',ip+'/send_message',{what:4,arg1:2,arg2:0});
 	} if(type == 'play'){
-		//get('播放',ip+'/play',{});
+		//get(null,'播放',ip+'/play',{});
 		get(null,'播放',ip+'/send_message',{what:4,arg1:3,arg2:0});
+	}else if(type == 'collect'){
+		get(null,'收藏歌曲',ip+'/send_message',{what:65536,arg1:0,arg2:6});
+	}else if(type == 'cancel_collect'){
+		get(null,'取消收藏',ip+'/send_message',{what:65536,arg1:0,arg2:7});
 	}
 	
 }
