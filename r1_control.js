@@ -299,7 +299,7 @@ function new_index(data){
 		musics_div.appendChild(btn);
 	}
 	musics_div.appendChild(document.createElement('br'));
-    var arr = [['收藏歌曲','collect'],['随机播放','playmode'],['取消收藏','cancel_collect']];
+    var arr = [['收藏歌曲','collect'],['取消收藏','cancel_collect'],['随机播放','playmode']];
 	for(var i=0;i<arr.length;i++){
 		var btn = document.createElement("input");
 		btn.id = 'music_btn_'+arr[i][1];
