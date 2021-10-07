@@ -1219,9 +1219,9 @@ function index(data){
 		iframe.url = 'http://'+ip;
 	}else{
 		if(typeof plus != 'undefined'){
-			iframe.url = 'http://r1.wxfsq.com:86';
+			iframe.url = 'http://xfdown.gitee.io';
 		}else{
-			iframe.url = 'http://r1.wxfsq.com';
+			iframe.url = 'http://xfdown.gitee.io';
 		}
 	}
 	iframe.src = iframe.url+'/?message';
@@ -3660,9 +3660,9 @@ function click(data){
 			alert('ok');
 		}else if(param.itemType == 'connect_page'){
 			if(typeof plus != 'undefined'){
-				location.href = 'http://r1.wxfsq.com:86/?t='+new Date().getTime();
+				location.href = 'http://xfdown.gitee.io/?t='+new Date().getTime();
 			}else{
-				location.href = 'http://r1.wxfsq.com/?t='+new Date().getTime();
+				location.href = 'http://xfdown.gitee.io/?t='+new Date().getTime();
 			}
 		}
     }else{
@@ -3688,7 +3688,7 @@ function send(tips,type,ws_type,data,call=null){
 
 function load(){
 
-    var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><meta name='referrer' content='never'><title>R1音箱控制页面</title><link rel='stylesheet' href='//r1.wxfsq.com/new_r1_control.css?t="+new Date().getTime()+"'/><link rel='shortcut icon' href='//q1.qlogo.cn/g?b=qq&nk=203017966&s=100' sizes='100x100'/></head>";
+    var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><meta name='referrer' content='never'><title>R1音箱控制页面</title><link rel='stylesheet' href='//xfdown.gitee.io/new_r1_control.css?t="+new Date().getTime()+"'/><link rel='shortcut icon' href='//q1.qlogo.cn/g?b=qq&nk=203017966&s=100' sizes='100x100'/></head>";
     document.getElementsByTagName("head")[0].innerHTML = head;
 	document.body.appendChild(main_div);
 	main_div.style = 'height:100%';
@@ -3701,7 +3701,7 @@ function load(){
 	
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = '//r1.wxfsq.com/jquery.min.js';
+    script.src = '//xfdown.gitee.io/jquery.min.js';
     main_div.appendChild(script);
 	if(location.href.indexOf('noimg') == -1){
 		var background1 = localStorage.getItem('background');
