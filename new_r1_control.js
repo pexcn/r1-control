@@ -1099,7 +1099,7 @@ function message(data){
 					arr = arr[2].split(' ');
 					var reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])/;
 					arr.forEach(function(value){
-						if(value != '' && reg.test(value)){
+						if(value != '' && value.indexOf('wlan0') > -1 && reg.test(value)){
 							ip = value.split('/')[0]+':8080';
 						}
 					});
