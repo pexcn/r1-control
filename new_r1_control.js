@@ -322,16 +322,10 @@ function custom_ip_page(){
 				}else{
 					tmp_ip = arr[i].hostname ? arr[i].hostname : arr[i].ip;
 				}
-				option.selected = 'selected';
 			}
 			device_list.appendChild(option);
 		}
-		if(tmp_ip == ''){
-			device_list.value = '';
-			if(device_list.length > 0){
-				//tmp_ip = device_list.value;
-			}
-		}
+		device_list.value = '';
 		div.appendChild(device_list);
 	}
 	
@@ -431,6 +425,7 @@ function custom_ip_page(){
 	}
 	
 	if(input.value != ''){
+        input.oninput();
 		var background_text = null;
 		var device_list = document.getElementById('device_list');
 		if(device_list){
