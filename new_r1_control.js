@@ -3126,15 +3126,17 @@ function update_info(data){
 		    	}
             }
 			update_btn_state(data);
-            if(ver > 1600 && u_ver > 1600){
-                var music_source = document.getElementById('music_source');
-				if(music_source){
-					for(i=0;i<music_source.length;i++){
-						if(music_source[i].value == data.music_source){
-							music_source[i].selected = 'selected';
-						}
-					}
-				}
+            if(ver > 1600){
+                if(u_ver > 1600){
+                    var music_source = document.getElementById('music_source');
+				    if(music_source){
+					    for(i=0;i<music_source.length;i++){
+					    	if(music_source[i].value == data.music_source){
+						    	music_source[i].selected = 'selected';
+						    }
+					    }
+				    }
+                }
                 arr = [['随机播放',1],['顺序播放',2],['单曲循环',3]];
                 playmode = arr[0];
                 for(i=0;i<arr.length;i++){
