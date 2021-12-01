@@ -44,7 +44,7 @@ var device_info_data = [];
 var device_info = document.createElement('div');
 var iframe = document.createElement('iframe');
 var qrcode_load = false;
-var web_ver = 2023;
+var web_ver = 2024;
 var main_div = document.createElement('div');
 var connect_timer = -1;
 var qrstate = 0;
@@ -168,7 +168,8 @@ var update_log = ['2021-03-19:音量条增加防误触(双击激活后可调节)
 '2021-08-29:设备信息页面增加打开/关闭蓝牙提示音按钮(new_Unisound1.8.25、new_EchoService1.8.41版本生效)。',
 '2021-08-31:设备信息页面支持new_EchoService旧版本。',
 '2021-09-28:设备连接页面支持使用设备名称连接音箱(例如：Phicomm_R1_2B11)。',
-'2021-10-27:修复1.8.22版本下切换播放模式无效果问题。'
+'2021-10-27:修复1.8.22版本下切换播放模式无效果问题。',
+'2021-12-01:最大音量改为动态获取。'
 ];
 load();
 window.onload = function(){
@@ -1065,6 +1066,11 @@ function message(data){
 			unisound_init_timer1 = -1;
 		}
 		Unisound(data);
+	}else if(type == 'max_vol'){
+		if(data.code == 200){
+			vols.max = data.data;
+			vol_text.innerHTML = ' '+vols.value+'/'+vols.max;
+		}
 	}else{
 		if(type == 'set_dev_name' || type == 'rec_dev_name'){
 			ws.send(JSON.stringify({type:'shell',type_id:'get_hostname',shell:"getprop net.hostname && netcfg"}));
@@ -1939,7 +1945,7 @@ function index(data){
 	vols.type = 'range';
     vols.min = 0;
     vols.step = 1;
-    vols.max = 15;
+    vols.max = data.vol;
 	vols.value = data.vol;
     vols.addEventListener('input', function() {
 		clearTimeout(vols_disabled_timer);
@@ -2103,6 +2109,7 @@ function index(data){
 			ws.send(JSON.stringify({type:'get_info'}));
 		});
 	}
+    ws.send(JSON.stringify({type:'max_vol'}));
 	ws.send(JSON.stringify({type:'shell',type_id:'get_hostname',shell:'getprop net.hostname && netcfg'}));
 }
 
