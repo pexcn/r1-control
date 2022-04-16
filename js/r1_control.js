@@ -602,7 +602,6 @@ function get_ip(){
 	var input = document.getElementById('input');
 	var device_sid = get_ip_btn.getAttribute('device_sid');
 	get_ip_btn.value1 = get_ip_btn.value;
-	input.value = '';
 	if(device_sid != ''){
 		var success = function(data){
 			if(data.code == 1){
@@ -632,7 +631,15 @@ function get_ip(){
 				get_ip_btn.disabled = false;
 			},1000);
 		};
-		$.ajax({type:'POST',url:'http://r1.wxfsq.com/ip',data:{device_sid:device_sid},dataType:'json',success:success,error:error});
+        if(control_host.indexOf('r1.wxfsq.com') > -1){
+			input.value = '';
+			$.ajax({type:'POST',url:'http://r1.wxfsq.com/ip',data:{device_sid:device_sid},dataType:'json',success:success,error:error});
+		}else{
+			console.log(input.value);
+			setTimeout(function(){
+				success({code:1,local_ip:input.value});
+			},500);
+		}
 		get_ip_btn.value = '正在获取IP，请稍候。。。';
 		get_ip_btn.disabled = true;
 	}else{
