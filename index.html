@@ -1,0 +1,78 @@
+﻿<html><head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><meta name='referrer' content='never'><title>R1音箱控制页面</title><link rel='shortcut icon' href='//q1.qlogo.cn/g?b=qq&nk=203017966&s=100' sizes='100x100'/><meta name="keywords" content="R1,斐讯R1,R1音箱,R1音箱控制"><script>window.subTitle='R1音箱控制页面';</script></head>
+<body style="background-color:#A9D0F5;">
+<script>
+if (!!window.ActiveXObject || 'ActiveXObject' in window){alert('抱歉，本页面不支持IE内核！');}
+
+if(location.href.indexOf('https://') == 0){
+	location.href = 'http'+location.href.substr(5);
+}
+
+var control_host = location.host;
+
+var temp_div = document.createElement("div");
+temp_div.id = 'temp_div';
+temp_div.style = 'text-align:center;';
+document.body.appendChild(temp_div);
+
+var h3 = document.createElement("h3");
+h3.style = 'text-align:center; color: red;';
+h3.innerHTML = '页面加载中。';
+temp_div.appendChild(h3);
+
+var btn = document.createElement("input");
+btn.type = 'button';
+btn.value = '刷新页面';
+btn.onclick = function(){
+	time = new Date().getTime();
+	setCookie('time',time,604800);
+	location.reload();
+};
+temp_div.appendChild(btn);
+
+var div = document.createElement('div');
+div.id = 'beian_div';
+div.style = 'position: absolute; left: 5px;';
+div.innerHTML = "<a style='color:red;' href='https://beian.miit.gov.cn/'>鲁ICP备2021017231号-1</a>";
+temp_div.appendChild(div);
+
+var custom_ip = true;
+var ip = '';
+var params = location.href.substr(location.href.indexOf('?')+1).split('&');
+for(var i = 0;i<params.length;i++){
+	var param = params[i].split('=');
+	if(param[0] == 'ip'){
+		ip = param[1];
+		if(ip.split(':').length < 2){
+			ip += ':8080';
+		}
+		custom_ip = false;
+	}
+}
+
+var script = document.createElement('script');script.type = 'text/javascript';
+script.src = './refresh.js?t='+new Date().getTime();
+document.body.appendChild(script);
+
+function setCookie(cname,cvalue,exdays)
+{
+  var d = new Date();
+  d.setTime(d.getTime()+(exdays*1000));
+  var expires = "expires="+d.toGMTString();
+  document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname)
+{
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) 
+  {
+    var c = ca[i].trim();
+    if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+</script>
+</body>
+</html>
