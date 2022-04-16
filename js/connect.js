@@ -1,6 +1,3 @@
-if(!control_host){
-	var control_host = 'r1.wxfsq.com';
-}
 var custom_ip = false;
 var ip = location.host;
 
