@@ -1,5 +1,5 @@
 if(!control_host){
-	var control_host = 'r1.wxfsq.com';
+	var control_host = 'xfdown.gitee.io';
 }
 if(!ver){
     var ver = 1000;
