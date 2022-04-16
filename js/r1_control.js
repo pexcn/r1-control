@@ -7145,11 +7145,11 @@ function load(){
 	
 	var div1 = document.createElement('div');
 	div1.style = 'position: absolute; left: 0; right: 0; text-align: center;';
-	div1.innerHTML = "<a style='color:red;' target='_blank' href='https://beian.miit.gov.cn/'>鲁ICP备2021017231号-1</a>";
+	div1.innerHTML = "<a style='color:red;' target='_blank' href='https://beian.miit.gov.cn/'>备案号</a>";
 	div.appendChild(div1);
 	
 	if(window.screen.width > 800){
-		main_div.appendChild(div);
+		//main_div.appendChild(div);
 	}
 	
     var div = document.createElement('div');
