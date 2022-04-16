@@ -1,3 +1,6 @@
+if(!control_host){
+	var control_host = 'r1.wxfsq.com';
+}
 var custom_ip = false;
 var ip = location.host;
 
@@ -23,7 +26,7 @@ btn.onclick = function(){
 temp_div.appendChild(btn);
 
 var script = document.createElement('script');script.type = 'text/javascript';
-script.src = 'http://r1.wxfsq.com/refresh.js?t='+new Date().getTime();
+script.src = 'http://'+control_host+'/refresh.js?t='+new Date().getTime();
 document.body.appendChild(script);
 
 function setCookie(cname,cvalue,exdays)
