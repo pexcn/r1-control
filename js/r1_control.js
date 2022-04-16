@@ -2557,15 +2557,14 @@ function index(data){
 			x = (x/this.clientWidth)*this.naturalWidth;
 			y = (y/this.clientHeight)*this.naturalHeight;
 			if(data.deltaY > -1){
-				var new_y = y-100;
+				var new_y = y - 100;
 			}else{
-				var new_y = y+100;
+				var new_y = y + 100;
 			}
-			if(new Date().valueOf() - mousewheel_interval>0){
-				mousewheel_interval = new Date().valueOf() +100;
+			if(new Date().valueOf() - mousewheel_interval > 0){
+				mousewheel_interval = new Date().valueOf() + 500;
 				ws_send(JSON.stringify({type:'input',input:'swipe '+x+' '+y+' '+x+' '+new_y}));
 			}
-		
 		}
 		screen_div.appendChild(img);
 		screen_div.appendChild(document.createElement('br'));
