@@ -33,11 +33,13 @@ temp_div.appendChild(btn);
 var baidu_hm_id = 'd8f2480c4be9dcd416e13265a32c4670';
 //var beian = '';
 
-//var div = document.createElement('div');
-//div.id = 'beian_div';
-//div.style = 'position: absolute; left: 5px;';
-//div.innerHTML = "<a style='color:rgba(238, 0, 0, 1);' href='https://beian.miit.gov.cn/'>"+beian+"</a>";
-//temp_div.appendChild(div);
+if(beian){
+	var div = document.createElement('div');
+	div.id = 'beian_div';
+	div.style = 'position: absolute; left: 5px;';
+	div.innerHTML = "<a style='color:rgba(238, 0, 0, 1);' href='https://beian.miit.gov.cn/'>"+beian+"</a>";
+	temp_div.appendChild(div);
+}
 
 var custom_ip = true;
 var ip = '';
