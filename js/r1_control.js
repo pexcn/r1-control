@@ -7078,9 +7078,7 @@ function load(){
 	div.style.display = 'none';
 	main_div.appendChild(div);
 	
-	if(!baidu_hm_id){
-		no_referrer();
-	}else{
+	if(typeof(baidu_hm_id) == 'string'){
 		(function() {
 		  var hm = document.createElement("script");
 		  hm.src = "https://hm.baidu.com/hm.js?"+baidu_hm_id;
@@ -7092,6 +7090,8 @@ function load(){
 		  };
 		  main_div.appendChild(hm);
 		})();
+	}else{
+		no_referrer();
 	}
 	
 	if(location.href.indexOf('debug') > -1){
@@ -7158,7 +7158,7 @@ function load(){
     div.innerHTML = "<a id='qun' style='color:rgba(238, 0, 0, 1);' target='_blank' href='https://jq.qq.com/?_wv=1027&k=hTbg34eR'>斐讯R1音箱交流群：772694950</a>";
 	main_div.appendChild(div);
 	
-	if(!beian){}else{
+	if(typeof(beian) == 'string'){
 		var div = document.createElement('div');
 		div.id = 'beian_div';
 		div.style = 'position: relative;';
