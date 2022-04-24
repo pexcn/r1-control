@@ -262,81 +262,97 @@ var update_log = ['2021-03-19：音量条增加防误触(双击激活后可调�
 ];
 load();
 window.onload = function(){
-	var temp_div = document.getElementById('temp_div');
-	if(temp_div){
-		temp_div.remove();
+	
+	var h3s = document.getElementsByTagName('h3');
+	if(h3s.length > 0){
+		h3s[0].innerHTML = '页面加载中。。。';
 	}
 	
-	background_div.id = 'background_div';
-	background_div.style = 'position: fixed; left: 0px; top: 0px; width:100%; height:100%';
-	document.body.appendChild(background_div);
-	document.body.style.backgroundColor = 'rgba(0,0,0,0.6)';
-	
-	var img = background;
-	if(location.href.indexOf('noimg') == -1 && location.href.indexOf(control_host) == -1){
-		var current_hostname = localStorage.getItem('current_hostname');
-		if(!current_hostname){
-			current_hostname = '';
-		}
-		hostname = current_hostname;
-		var background1 = localStorage.getItem(current_hostname+'_background');
-		if(background1){
-			img = background1;
-		}
-	}
-	set_background_css(img);
-	
-	h3.style.color = 'rgba(238, 0, 0, 1)';
-	h3.innerHTML = 'R1音箱控制页面';
-	var height = h3.clientHeight;
-	if(height < 60){
-		h3.style.minHeight = height;
+	var tmp = localStorage.getItem('Cover_background_open');
+	if(tmp == null || tmp == '' || tmp == 'true'){
+		tmp = true;
 	}else{
-		h3.style.minHeight = 27;
+		tmp = false;
 	}
-	if(location.href.substring(0,6) == 'https:'){
-		location.href = 'http:' + location.href.substring(6);
-	}
+	Cover_background_open = tmp;
 	
-	var params = getparam(['connect_ip','connect_id','no_auto_connect','ver','u_ver']);
-	if(params != null){
-		console.log(params);
-		if(!params.hasOwnProperty('no_auto_connect')){
-			if(params.hasOwnProperty('connect_id')){
-				connect_id = params['connect_id'];
+	setTimeout(function(){
+		var temp_div = document.getElementById('temp_div');
+		if(temp_div){
+			temp_div.remove();
+		}
+		
+		background_div.id = 'background_div';
+		background_div.style = 'position: fixed; left: 0px; top: 0px; width:100%; height:100%';
+		document.body.appendChild(background_div);
+		document.body.style.backgroundColor = 'rgba(0,0,0,0.6)';
+		
+		var img = background;
+		if(location.href.indexOf('noimg') == -1 && location.href.indexOf(control_host) == -1){
+			var current_hostname = localStorage.getItem('current_hostname');
+			if(!current_hostname){
+				current_hostname = '';
 			}
-			if(params.hasOwnProperty('connect_ip')){
-				connect_ip = params['connect_ip'];
-				if(connect_ip != null && connect_ip != ''){
-					if(connect_ip.indexOf(':')  > -1){
-						connect_ip = connect_ip.substring(0,connect_ip.indexOf(':'));
+			hostname = current_hostname;
+			var background1 = localStorage.getItem(current_hostname+'_background');
+			if(background1){
+				img = background1;
+			}
+		}
+		
+		set_background_css(img);
+		h3.innerHTML = 'R1音箱控制页面';
+		var height = h3.clientHeight;
+		if(height < 60){
+			h3.style.minHeight = height;
+		}else{
+			h3.style.minHeight = 27;
+		}
+		if(location.href.substring(0,6) == 'https:'){
+			location.href = 'http:' + location.href.substring(6);
+		}
+		
+		var params = getparam(['connect_ip','connect_id','no_auto_connect','ver','u_ver']);
+		if(params != null){
+			console.log(params);
+			if(!params.hasOwnProperty('no_auto_connect')){
+				if(params.hasOwnProperty('connect_id')){
+					connect_id = params['connect_id'];
+				}
+				if(params.hasOwnProperty('connect_ip')){
+					connect_ip = params['connect_ip'];
+					if(connect_ip != null && connect_ip != ''){
+						if(connect_ip.indexOf(':')  > -1){
+							connect_ip = connect_ip.substring(0,connect_ip.indexOf(':'));
+						}
+					}else{
+						connect_ip = '';
 					}
-				}else{
-					connect_ip = '';
+					if(!reg_ip.test(connect_ip) && !/phicomm_r1_\S+/u.test(connect_ip.toLowerCase())){
+						connect_ip = -1;
+					}
 				}
-				if(!reg_ip.test(connect_ip) && !/phicomm_r1_\S+/u.test(connect_ip.toLowerCase())){
-					connect_ip = -1;
+				
+				if(params.hasOwnProperty('ver')){
+					ver = params['ver'];
+					delparam('ver');
 				}
-			}
-			
-			if(params.hasOwnProperty('ver')){
-				ver = params['ver'];
-				delparam('ver');
-			}
-			
-			if(params.hasOwnProperty('u_ver')){
-				u_ver = params['u_ver'];
-				delparam('u_ver');
+				
+				if(params.hasOwnProperty('u_ver')){
+					u_ver = params['u_ver'];
+					delparam('u_ver');
+				}
 			}
 		}
-	}
+		
+		if(custom_ip){
+			custom_ip_page();
+		}else{
+			init_login();
+			init();
+		}
+	},500);
 	
-	if(custom_ip){
-		custom_ip_page();
-	}else{
-		init_login();
-		init();
-	}
 }
 
 function custom_ip_page(){
@@ -5103,7 +5119,7 @@ function update_info(data){
 				
 				
 				if(ver+1 > 1858){
-					if(data.play_state && music_info.state != 6){
+					if(data.play_state && (music_info.state != 6 && music_info.state != 10)){
 						music_pic.style.webkitAnimationPlayState = "running";
 						music_btn_play.value = '暂停';
 						music_btn_play.setAttribute('data','pause');
@@ -5111,8 +5127,8 @@ function update_info(data){
 						music_pic.style.webkitAnimationPlayState = "paused";
 						music_btn_play.value = '播放';
 						music_btn_play.setAttribute('data','play');
-						if(music_info.state == 6){
-							music_btn_play.value = '缓冲';
+						if(music_info.state == 6 || music_info.state == 10){
+							music_btn_play.value = music_info.state == 6 ? '缓冲' : '加载';
 							music_btn_play.disabled = true;
 						}else{
 							music_btn_play.disabled = false;
@@ -5346,7 +5362,7 @@ function update_music_info(){
 			}else{
 				data = {info:music_id,music_info:JSON.stringify(music_info)};
 			}
-			$.ajax({type:'POST',url:'http://music.wxfsq.com/music/',data:data,dataType:'json',success:success,error:error});
+			$.ajax({type:'POST',url:'http://music.wxfsq.com/music/index.php',data:data,dataType:'json',success:success,error:error});
 		}
 	}
 	
@@ -5832,9 +5848,10 @@ function musicpic_background(){
 			var size = document.body.offsetWidth;
 		}
 		var img = 'background: url("'+url+'"); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;';
-		img += 'transform: translate(-3%,-3%); filter: blur(60px) brightness(100%); contrast(120%); opacity: 0.6;';//
+		//var img = 'width:100%; height:100%';
+		img += 'transform: translate(-3%,-3%); filter: blur(60px) brightness(100%); contrast(100%);';//opacity: 0.6;
 		set_background_css(img);
-		main_div.style = 'position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto;background-color: rgba(0,0,0,0.3);';
+		main_div.style = 'position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto;background-color: rgba(0,0,0,0.0);';
 	}else{
 		Restore_background();
 	}
@@ -6678,17 +6695,17 @@ function create_music_info_window(data){
 		text_arr.push("歌曲名称："+temp_api_musicinfo.name);
 		text_arr.push("歌手名称："+temp_api_musicinfo.artist);
 		var arr = temp_api_musicinfo.id.split(',');
-		var html = "<a style='color:rgba(238, 0, 0, 1);' target='_blank' href='"+temp_api_musicinfo.link+"'>"+arr[0]+"</a>";
-		text_arr.push("歌曲ID："+html);
-		var arr = temp_api_musicinfo.id.split(',');
 		var type = types[arr[1]];
 		if(!type){
 			if(arr[0].substring(0,6) == 'MUSIC_'){
 				type = '酷我音乐';
+				arr[0] = arr[0].substring(6);
 			}else{
 				type = arr[1];
 			}
 		}
+		var html = "<a style='color:rgba(238, 0, 0, 1);' target='_blank' href='"+temp_api_musicinfo.link+"'>"+arr[0]+"</a>";
+		text_arr.push("歌曲ID："+html);
 		text_arr.push("歌曲来源："+type);
 		text_arr.push("------歌词------");
 		var arr = temp_api_musicinfo.lrc.match(/(\[\d{1,3}:\d{1,2}.\d{1,3}\])(.*)/g);
@@ -7055,7 +7072,7 @@ function ws_send(data){
 function load(){
 	var h3s = document.getElementsByTagName('h3');
 	if(h3s.length > 0){
-		h3s[0].innerHTML = '页面加载中。。。';
+		h3s[0].innerHTML = '页面加载中。。';
 	}
 	main_div.style = 'height:100%';
 	document.body.appendChild(main_div);
@@ -7069,7 +7086,7 @@ function load(){
 		setCookie('time',time,604800);
 	}
 	
-	var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><title>R1音箱控制页面</title><link rel='stylesheet' href='http://"+control_host+"/new_r1_control.css'/><link rel='shortcut icon' href='http://q1.qlogo.cn/g?b=qq&nk=203017966&s=100' sizes='100x100'/><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-touch-fullscreen' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black'><meta name='full-screen' content='yes'><meta name='browsermode' content='application'><meta name='x5-fullscreen' content='true'><meta name='x5-page-mode' content='app'><meta name='keywords' content='R1,斐讯R1,R1音箱,R1音箱控制,R1音箱控制页面'>";
+	var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><title>R1音箱控制页面</title><link rel='stylesheet' href='http://"+control_host+"/new_r1_control.css?t="+time+"'/><link rel='shortcut icon' href='http://q1.qlogo.cn/g?b=qq&nk=203017966&s=100' sizes='100x100'/><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-touch-fullscreen' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black'><meta name='full-screen' content='yes'><meta name='browsermode' content='application'><meta name='x5-fullscreen' content='true'><meta name='x5-page-mode' content='app'><meta name='keywords' content='R1,斐讯R1,R1音箱,R1音箱控制,R1音箱控制页面'>";
 	
     document.getElementsByTagName("head")[0].innerHTML = head;
 	
@@ -7080,15 +7097,15 @@ function load(){
 	
 	if(typeof(baidu_hm_id) == 'string'){
 		(function() {
-		  var hm = document.createElement("script");
-		  hm.src = "https://hm.baidu.com/hm.js?"+baidu_hm_id;
-		  hm.onload = function(){
-			  no_referrer();
-		  };
-		  hm.onerror = function(){
-			  no_referrer();
-		  };
-		  main_div.appendChild(hm);
+			var hm = document.createElement("script");
+			hm.src = "http://hm.baidu.com/hm.js?"+baidu_hm_id;
+			hm.onload = function(){
+				no_referrer();
+			};
+			hm.onerror = function(){
+				no_referrer();
+			};
+			main_div.appendChild(hm);
 		})();
 	}else{
 		no_referrer();
@@ -7184,13 +7201,6 @@ function load(){
 	document.addEventListener('plusready',function(){
 		update_StatusBar();
 	});
-	var tmp = localStorage.getItem('Cover_background_open');
-	if(tmp == null || tmp == '' || tmp == 'true'){
-		tmp = true;
-	}else{
-		tmp = false;
-	}
-	Cover_background_open = tmp;
 	
 }
 
