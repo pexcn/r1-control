@@ -1,5 +1,5 @@
 if(!control_host){
-	var control_host = 'xfdown.getee.io';
+	var control_host = 'xfdown.gitee.io';
 }
 if(!ver){
     var ver = 1000;
