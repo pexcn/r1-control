@@ -5520,7 +5520,7 @@ function to_ms(time){
 
 function start_updateinfo(time){
 	if(!time){
-		time = 1000;
+		time = 500;
 	}
 	stop_updateinfo();
 	clearInterval(ping_timer);
@@ -7154,17 +7154,17 @@ function load(){
 	script.onerror = function(){
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'http://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js';
+		script.src = 'http://'+control_host+'/jquery-3.6.0.min.js';
 		main_div.appendChild(script);
 	}
     script.type = 'text/javascript';
-	script.src = 'http://'+control_host+'/jquery-3.6.0.min.js';
+	script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js';
     main_div.appendChild(script);
 	
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
-	script.src = 'http://'+control_host+'/getcanvaspixelcolor.js';
-	main_div.appendChild(script);
+	//var script = document.createElement('script');
+	//script.type = 'text/javascript';
+	//script.src = 'http://'+control_host+'/getcanvaspixelcolor.js';
+	//main_div.appendChild(script);
 	
     var div = document.createElement('div');
     div.id = 'qun_div';
