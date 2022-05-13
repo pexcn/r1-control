@@ -7659,7 +7659,7 @@ function load(){
 	if(h3s.length > 0){
 		h3s[0].innerHTML = '页面加载中。。';
 	}
-	main_div.style = 'height:100%';
+	main_div.style = 'height: 100%';
 	document.body.appendChild(main_div);
 	
 	if(location.href.indexOf('message') > -1){
