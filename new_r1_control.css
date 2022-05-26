@@ -1,3 +1,25 @@
+.music_lrc_div::-webkit-scrollbar {
+	display: none;
+}
+
+.lrc{
+	font-size: 15px;
+	text-align: center;
+	color: rgba(255, 147, 71, 1);
+	width: 100%;
+}
+
+.custom_lrc[custom=true]{
+	font-size: 19px !important;
+	color:rgba(238, 0, 0, 1) !important;
+	margin: 0 0 0 0 !important;
+}
+
+.custom_lrc[custom=false]{
+	font-size: 19px !important;
+	color: rgba(255, 255, 0, 1) !important;
+	margin: 0 0 0 0 !important;
+}
 
 h3{
 	text-align:center;
@@ -40,13 +62,6 @@ text[id=list_ico]{
 	width:80%;
 	align:center;
 	color:#987cb9;
-}
-
-.lrc{
-	minHeight: 25px;
-	text-align:center;	
-	color: #FF9347;
-	font-size: 16px;
 }
 
 input[type=checkbox]{
@@ -227,7 +242,7 @@ select{
 	}
 }
 .btn:active {
-	background-color: #FF9347;
+	background-color: rgba(255, 147, 71, 1);
 }
 .btn:disabled {
 	background-color: #808080;
@@ -382,4 +397,3 @@ input[type=range]::-moz-range-thumb {
     text-decoration: none;
     cursor: pointer;
 }
-
