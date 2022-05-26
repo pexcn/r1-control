@@ -15,6 +15,7 @@ if(!custom_ip){
 if(!control_host){
 	var control_host = 'r1.wxfsq.com';
 }
+var display_RebootEcho_timer = -1;
 var Current_MusicData = null;
 var login_timer = -1;
 var switch_quality = document.createElement('select');
@@ -109,7 +110,7 @@ var eqs_div = document.createElement('div');
 var bass_div = document.createElement('div');
 var loudness_div = document.createElement('div');
 var sound_effects_div = document.createElement('div');
-var music_lrc = document.createElement('span');
+var music_lrc = document.createElement('div');
 var popup = document.createElement('div');
 var play_index = 0;
 var music_title = '';
@@ -270,7 +271,7 @@ var update_log = ['2021-03-19：音量条增加防误触(双击激活后可调�
 '2022-05-05：增加点播当前源歌单功能（请点击我的歌单按钮）。',
 '2022-05-08：增加播放音质切换功能（new_EchoService1.8.63版本生效（仅ExoPlayer播放器））。',
 '2022-05-13：修复旧版无法更新播放信息问题。',
-'2022-05-15：优化封面背景模糊效果。'
+'2022-05-26：优化封面背景效果，优化多行滚动歌词效果。'
 ];
 load();
 window.onload = function(){
@@ -295,7 +296,7 @@ window.onload = function(){
 		}
 		
 		background_div.id = 'background_div';
-		background_div.style = 'position: fixed; left: 0px; top: 0px; width:100%; height:100%';
+		background_div.style = 'z-index: -1; position: fixed; left: 0px; top: 0px; width:100%; height:100%';
 		document.body.appendChild(background_div);
 		document.body.style.backgroundColor = 'rgba(0,0,0,0.6)';
 		
@@ -796,6 +797,9 @@ function init(){
 		var h3 = document.getElementsByTagName('h3')[0];
 		if(init_state){
 			//ping_timer = setInterval(function(){ws_send(JSON.stringify({type:'ping'}));},3000);
+			display_RebootEcho_timer = setTimeout(function(){
+				
+			},3000);
 			h3.innerHTML = '连接音箱成功，正在初始化。。。';
 			setTimeout(function(){
 				ws_send(JSON.stringify({type:'shell',type_id:'ping_r1service',shell:'date & ping -w 1 r1service.wxfsq.com'}));
@@ -914,6 +918,30 @@ function init(){
 			}
 		}
 	};
+}
+
+function display_RebootEcho(display = true){
+	clearTimeout(display_RebootEcho_timer);
+	var btn = document.getElementById("RebootEcho_btn");
+	if(btn != null){
+		btn.remove();
+	}
+	
+	if(display_RebootEcho == true){
+		display_RebootEcho_timer = setTimeout(function(){
+			var btn = document.createElement("input");
+			btn.id = 'RebootEcho_btn';
+			btn.type = 'button';
+			btn.className = 'btn';
+			btn.value = '重启echo';
+			btn.onclick = function(){
+				this.value = '重启中。。。';
+				this.disabled = true;
+				ws_send(JSON.stringify({type:'reboot_echo'}));
+			};
+			h3.parentNode.appendChild(btn);
+		},3000);
+	}
 }
 
 function start_unisound(){
@@ -2882,7 +2910,7 @@ function index(data){
 	//音乐
 	musics_div.style = 'display: none;';
     music_pic.id = 'music_pic';
-	music_pic.style = 'display: block;margin: 0px auto;position: relative;width: 200px;height: 200px;border: 6px solid rgba(0, 0, 0, 0.1);overflow: hidden;border-radius: 100%;-webkit-animation: img 30s linear infinite;animation: img 30s linear infinite;animation-play-state:paused;';
+	music_pic.style = 'display: block;margin: 0px auto;position: relative;width: 183px;height: 183px;border: 6px solid rgba(0, 0, 0, 0.1);overflow: hidden;border-radius: 100%;-webkit-animation: img 30s linear infinite;animation: img 30s linear infinite;animation-play-state:paused;';
 	music_pic.nopic = 'http://'+control_host+'/pic/nopic.jpg';
     music_pic.src = music_pic.nopic;
 	
@@ -2896,7 +2924,7 @@ function index(data){
 	
 	music_lrc.innerHTML = '';
 	musics_div.appendChild(music_pic); 
-	music_lrc.style = 'display: none;margin: 1px auto;width: 100%;height: 211px;';
+	music_lrc.style = 'display: none; width: 100%;height: 195px;';
 	musics_div.appendChild(music_lrc);
 	music_pic.ondblclick = function(){
 		if(music_info != null){
@@ -2925,7 +2953,10 @@ function index(data){
 			},10);
 		}
 	}
-	musics_div.appendChild(document.createElement('br'));
+	
+	var div = document.createElement('div');div.style = 'height:25px;';
+	musics_div.appendChild(div);
+	
 	music_time_position.innerHTML = '00:00';
 	var div = document.createElement('div');div.style = 'width:50px;display:inline-block;';div.appendChild(music_time_position);
 	musics_div.appendChild(div);
@@ -4530,6 +4561,9 @@ function update_device_info1(){
 function useless_services_detection(data){
 	useless_services_list = [];
 	var list_text = 'com.phicomm.speaker.airskill,com.android.providers.telephony,com.phicomm.speaker.productiontest,com.android.externalstorage,com.android.providers.downloads,com.android.certinstaller,com.phicomm.speaker.bugreport,com.android.inputdevices,com.android.server.telecom,com.android.keychain,com.phicomm.speaker.otaservice,com.android.proxyhandler,com.phicomm.speaker.ijetty,com.android.vpndialogs,com.android.location.fused,com.phicomm.speaker.exceptionreporter';
+	if(u_ver+1 > 1845){
+		list_text += ',com.phicomm.speaker.systemtool';
+	}
 	//var list = ['com.phicomm.speaker.exceptionreporter','com.phicomm.speaker.ijetty','com.phicomm.speaker.airskill','com.phicomm.speaker.bugreport','com.phicomm.speaker.otaservice','com.phicomm.speaker.productiontest'];
 	var list = list_text.split(',');
 	for(var i=0;i<list.length;i++){
@@ -4807,8 +4841,11 @@ function get_ver(){
 	if(typeof(xiaoai_ver) == 'string'){
 		results.push("小爱Lite版本："+xiaoai_ver);
 	}
+	results.push("--------------------");
 	results.push("提示：双击音量条或点击音量标题可解锁音量调节！");
 	results.push('提示：可在上传文件页面（点击"上传软件更新"按钮进入）直接上传软件更新！');
+	results.push('提示：双击封面可切换多行滚动歌词！');
+	results.push("--------------------");
 	results.push("---WEB更新日志---\r\n"+log);
 	
     return results.join("\r\n");
@@ -5518,6 +5555,8 @@ function update_info(data){
 										quality = '超品' + type;
 									}else if(Format.bitrate > 128000){
 										quality = '高品' + type;
+									}else if(Format.bitrate < 128000){
+										quality = '低品' + type;
 									}
 									
 									text += quality;
@@ -5952,35 +5991,69 @@ function update_lrc(update,wait=false){
 		}
 		
 		if(music_lrc.style.display == "block"){
-			lrcs1_index -= 1;
-			var lrc_list = [];
-			
-			for(var i=0;i<3;i++){
-				if(Array.isArray(lrcs1[lrcs1_index + i])){
-					var lrc = lrcs1[lrcs1_index + i][1];
-				}else{
-					var lrc = '';
-				}
-				
-				var html = "";
-				if(i == 1){
-					if(lrcs[lrcs_index][1] == ''){
-						html = "<h3 class='lrc' style='font-size: 19px;'>"+lrc+"<br></br></h3>";
-					}else{
-						html = "<h3 class='lrc' style='font-size: 19px;color:rgba(238, 0, 0, 1);'>"+lrc+"<br></br></h3>";
-					}
-				}else if(i == 2){
-					html = "<h3 class='lrc' style=''>"+lrc+"</h3>";
-				}else{
-					html = "<h3 class='lrc' style='height:13px'></h3><h3 class='lrc' style=''>"+lrc+"<br></br></h3>";
-				}
-				lrc_list.push(html);
+			if(lrcs1.length < 2){
+				lrcs1_index = 1;
 			}
 			
-			var lrc_html = lrc_list.join("");
-			if(bak_lrc != lrc_html || music_lrc.innerHTML == ''){
-				music_lrc.innerHTML = lrc_html;
-				bak_lrc = lrc_html;
+			var lrc_list = [];
+			lrcs1_index = lrcs1_index+1;
+			var lrc_div = music_lrc.getElementsByTagName('div');
+			lrc_div = lrc_div != null ? lrc_div[0] : null;
+			if(music_lrc.lrcs != lrcs && lrcs1.length > 0){
+				var lrc_div = document.createElement('div');
+				lrc_div.style = 'width: 100%;height: '+music_lrc.style.height+'; overflow-x:hidden; overflow-y:auto;';
+				lrc_div.className = 'music_lrc_div';
+				music_lrc.lrcs = lrcs;
+				music_lrc.innerHTML = '';
+				music_lrc.appendChild(lrc_div);
+				var num = 1;
+				if(lrcs1.length < 3){
+					num = 3-lrcs1.length;
+				}
+				
+				console.log(num);
+				
+				for(var i=0;i<num;i++){
+					var lrc_h3 = document.createElement('h3');
+					lrc_h3.className = 'lrc';
+					lrc_h3.style = 'height: 20px';
+					lrc_div.appendChild(lrc_h3);
+				}
+				
+				
+				for(var i=0;i<lrcs1.length;i++){
+					if(Array.isArray(lrcs1[i])){
+						var lrc = lrcs1[i][1];
+					}else{
+						var lrc = '';
+					}
+					var lrc_h3 = document.createElement('h3');
+					lrc_h3.className = 'lrc';
+					lrc_h3.innerHTML = lrc;
+					lrc_div.appendChild(lrc_h3);
+				}
+				console.log(lrc_div.innerHTML);
+			}
+			
+			var lrc_h3s = lrc_div.getElementsByTagName('h3');
+			if(lrc_h3s[lrcs1_index] != null){
+				var lrc_h3 = lrc_h3s[lrcs1_index];
+				var custom = (String)(lrcs[lrcs_index][1] != '');
+				if(lrc_h3.className.indexOf('custom_lrc') == -1 || lrc_h3.getAttribute('custom') != custom){
+					console.log('lrcs1_index:'+lrcs1_index);
+					$('.custom_lrc').removeClass('custom_lrc');
+					lrc_h3.className = 'lrc custom_lrc';
+					lrc_h3.setAttribute('custom',custom);
+					if(lrc_h3s[lrcs1_index] != null){
+						var len = 0;
+						for(var index = 1;index < lrcs1_index-1;index++){
+							len += lrc_h3s[index].offsetTop - lrc_h3s[index-1].offsetTop;
+						}
+						console.log(len);
+						
+						$('.music_lrc_div').animate({ scrollTop:len},200);
+					}
+				}
 			}
 			
 		}else{
@@ -6356,18 +6429,17 @@ function musicpic_background(){
 	var url = music_pic.src;
 	if(url != '' && url != 'http://localhost/' && url.indexOf('nopic') == -1){
 		background_div.style.filter = '';
-		background_div.style.width = '105%';
-		background_div.style.height = '105%';
+		background_div.style.width = '100%';
+		background_div.style.height = '100%';
 		if(document.body.offsetHeight > document.body.offsetWidth){
 			var size = document.body.offsetHeight;
 		}else{
 			var size = document.body.offsetWidth;
 		}
-		var img = 'background: url("'+url+'"); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position: center;';
-		//var img = 'width:100%; height:100%';
-		img += 'transform: translate(-3%,-3%); filter: blur(50px) brightness(100%) contrast(100%);';//opacity: 0.7;
+		var img = 'z-index: -1; background: url("'+url+'"); background-repeat: no-repeat; background-size: cover; background-attachment: fixed; background-position-x: center;';
+		img += 'filter: blur(36px) brightness(100%) contrast(100%); opacity: 0.66; transform: translate(-0%,-0%);';
 		set_background_css(img);
-		main_div.style = 'position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.5);';//rgba(66, 66, 100, 0.2)
+		main_div.style = 'position: fixed; z-index: 0; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.0);';
 	}else{
 		Restore_background();
 	}
@@ -7618,7 +7690,7 @@ function update_StatusBar(){
 	if(typeof(plus) != 'undefined'){
 		var StatusBar_div = document.getElementById('StatusBar');
 		if(plus.navigator.isImmersedStatusbar()){
-			StatusBar_div.style.height = (parseInt(plus.navigator.getStatusbarHeight()/2)+5) + 'px';
+			StatusBar_div.style.height = (parseInt(plus.navigator.getStatusbarHeight()/2)+10) + 'px';
             StatusBar_div.style.display = 'block';
 		}else{
 			StatusBar_div.style.display = 'none';
@@ -7633,7 +7705,7 @@ function update_StatusBar(){
 		}
 		//plus.navigator.setFullscreen(true);//全屏
 	}
-	main_div.style = 'position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto;background-color: rgba(0,0,0,0.0);';
+	main_div.style = 'position: fixed; z-index: 0; left: 0; top: 0; width: 100%; height: 100%; overflow: auto;background-color: rgba(0,0,0,0.0);';
 	var BackgroundBlurValue = localStorage.getItem(hostname+'_BackgroundBlur');
 	if(BackgroundBlurValue == null || BackgroundBlurValue == ''){
 		BackgroundBlurValue = '0';
@@ -7861,9 +7933,9 @@ function load(){
 	
     var div = document.createElement('div');
     div.id = 'qun_div';
-    div.style = 'position: absolute; left: 5px; z-index: 1;';
+    div.style = 'position: absolute; left: 5px; z-index: 0;';
     if(window.screen.width > 800){
-		div.style = 'position: absolute; left: 5px; z-index: 1; white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis; max-width:40%';
+		div.style = 'position: absolute; left: 5px; z-index: 0; white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis; max-width:40%';
 	}
     div.innerHTML = "<a id='qun' style='color:rgba(238, 0, 0, 1);' target='_blank' href='https://jq.qq.com/?_wv=1027&k=hTbg34eR'>斐讯R1音箱交流群：772694950</a>";
 	main_div.appendChild(div);
