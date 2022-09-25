@@ -1,7 +1,7 @@
 if(!control_host){
 	var control_host = 'r1.wxfsq.com';
 }
-var web_ver = 2659;
+var web_ver = 2687;
 if(localStorage.getItem('web_ver') && localStorage.getItem('web_ver') != web_ver){
 	localStorage.setItem('web_ver',web_ver);
 	var time = new Date().getTime();

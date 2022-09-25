@@ -15,6 +15,7 @@ if(!custom_ip){
 if(!control_host){
 	var control_host = 'r1.wxfsq.com';
 }
+var connect_init = false;
 var display_RebootEcho_timer = -1;
 var Current_MusicData = null;
 var login_timer = -1;
@@ -150,6 +151,7 @@ var div_list = document.createElement('div');
 var lists = document.createElement('div');
 var list = document.createElement('table');
 var vol_text = document.createElement('text');
+
 var buttons = [['点播音乐',{ws_type:'send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'web_播放'},type:1,min_ver:1600,min_uver:1700,err:'请输入要点播的音乐，例如：泠鸢yousa 乡情曲！',succ:'点播成功！'}],
 ['点播广播',{ws_type:'send_message',input:'obj',param:{what:65536,arg1:0,arg2:1,obj:'web_收听'},type:1,min_ver:1600,min_uver:1700,err:'请输入要点播的广播电台名称，例如：山东音乐广播！',succ:'点播成功！'}],
 ['点播歌单',{ws_type:'send_message',input:'obj',param:{what:65536,arg1:0,arg2:9,obj:''},type:1,min_ver:1700,min_uver:1700,err:'请输入要点播的歌单链接，例如：https://y.qq.com/n/ryqq/playlist/211111！',succ:'点播成功！'}],
@@ -232,7 +234,7 @@ var update_log = ['2021-03-19：音量条增加防误触(双击激活后可调�
 '2021-06-25：设备信息页面增加禁用无用的服务按钮（此功能可有效释放运存！），设备信息页面增加清除小讯数据按钮。',
 '2021-07-23：适配新版本，设备信息页面增加清除闹铃/提醒按钮(闹铃/提醒为空时不显示，new_Unisound1.8.20、new_EchoService1.8.35版本生效)。',
 '2021-08-01：app增加音量按键监听。',
-'2021-08-06：设备信息页面增加唤醒精度控制功能，优化播放进度调节体验。',
+'2021-08-06：设备信息页面增加唤醒识别精度控制功能，优化播放进度调节体验。',
 '2021-08-10：优化设备连接页面。',
 '2021-08-12：设备信息页面增加开始/退出休眠按钮。',
 '2021-08-18：设备信息页面增加信息实时更新（登录信息和授权信息非实时），设备信息页面增加打开/关闭提交播放记录按钮(提交播放记录、播放时间至当前登录的账号(new_Unisound1.8.24版本生效))。',
@@ -271,7 +273,8 @@ var update_log = ['2021-03-19：音量条增加防误触(双击激活后可调�
 '2022-05-05：增加点播当前源歌单功能（请点击我的歌单按钮）。',
 '2022-05-08：增加播放音质切换功能（new_EchoService1.8.63版本生效（仅ExoPlayer播放器））。',
 '2022-05-13：修复旧版无法更新播放信息问题。',
-'2022-05-26：优化封面背景效果，优化多行滚动歌词效果。'
+'2022-05-26：优化封面背景效果，优化多行滚动歌词效果。',
+'2022-07-22：适配新版本。'
 ];
 load();
 window.onload = function(){
@@ -371,8 +374,12 @@ window.onload = function(){
 function custom_ip_page(){
 	var ip_connect = localStorage.getItem('ip_connect') != 'false';
 	
-	document.title = 'R1音箱连接页面'
+	document.title = 'R1音箱连接页面';
 	h3.innerHTML = '请输入音箱IP进行连接！';
+	h3.ondblclick = function(){
+		this.ondblclick = function(){};
+		load_console();
+	};
 	var div = document.createElement('div');
 	div.id = 'custom_ip_page';
 	
@@ -637,6 +644,9 @@ function custom_ip_page(){
 	
 	if(connect_ip != -1 || connect_id != null){
 		setTimeout(function(){
+			if(connect_timer == -1){
+				return;
+			}
 			test_connect();
 		},100);
 	}
@@ -715,7 +725,9 @@ function test_connect(){
 			clearTimeout(test_connect_timeout_timer);
 			test_connect_timeout_timer = -1;
 			divs.removeChild(document.getElementById('custom_ip_page'));
-			test_connect_state = true;
+			test_connect_state = true
+			connect_init = true;
+			display_RebootEcho(true);
 			h3.innerHTML = '连接音箱成功，正在初始化。。。';
 			if(reg_ip1.test(ip)){
 				window.localStorage.removeItem('hostname');
@@ -754,7 +766,7 @@ function test_connect(){
 				var msg = '连接音箱超时，请检查音箱IP是否正确或重启音箱再试！';
 				alert(msg);
 			}
-		},6000);
+		},8000);
 	}
 }
 
@@ -797,9 +809,8 @@ function init(){
 		var h3 = document.getElementsByTagName('h3')[0];
 		if(init_state){
 			//ping_timer = setInterval(function(){ws_send(JSON.stringify({type:'ping'}));},3000);
-			display_RebootEcho_timer = setTimeout(function(){
-				
-			},3000);
+			connect_init = true;
+			display_RebootEcho(true);
 			h3.innerHTML = '连接音箱成功，正在初始化。。。';
 			setTimeout(function(){
 				ws_send(JSON.stringify({type:'shell',type_id:'ping_r1service',shell:'date & ping -w 1 r1service.wxfsq.com'}));
@@ -908,6 +919,10 @@ function init(){
 	
 	ws.onmessage = function(data){
 		if(typeof(data.data) == "string"){
+			if(connect_init == true){
+				connect_init = false;
+				display_RebootEcho(false);
+			}
 			data = JSON.parse(data.data);
 			message(data);
 		}else{
@@ -1647,6 +1662,8 @@ function Unisound(data){
 				return;
 			}else if(data.type == 'Main_Wakeup_Benchmark'){
 				Main_Wakeup_Benchmark_info(data);
+			}else if(data.type == 'User_Wakeup_Benchmark'){
+				User_Wakeup_Benchmark_info(data);
 			}else if(data.type == 'get_info'){
 				update_unisound_info(data);
 				return;
@@ -2291,7 +2308,7 @@ function index(data){
 		if(is_new_unisound && u_ver+1 > 1822 && ver+1 > 1825){
 			var Main_Wakeup_Benchmark_div = document.createElement('div');
 			var text = document.createElement('text');
-			text.innerHTML = '唤醒精度';
+			text.innerHTML = '唤醒识别精度';
 			var div = document.createElement('div');div.appendChild(text);
 			Main_Wakeup_Benchmark_div.appendChild(div);
 			var text = document.createElement('text');
@@ -2302,12 +2319,17 @@ function index(data){
 			Main_Wakeup_Benchmark.min = 0;
 			Main_Wakeup_Benchmark.step = 10;
 			Main_Wakeup_Benchmark.max = 600;
+			Main_Wakeup_Benchmark.maxvalue = 600;
 			Main_Wakeup_Benchmark.value = 0;
 			Main_Wakeup_Benchmark.disabled = true;
 			Main_Wakeup_Benchmark.addEventListener('input', function() {
 				clearTimeout(Main_Wakeup_Benchmark_timer);
 				Main_Wakeup_Benchmark_timer = setTimeout(function(){
-					ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'Main_Wakeup_Benchmark',Benchmark:parseInt(Main_Wakeup_Benchmark.value)/100}}));
+					if(u_ver+1 > 1848){
+						ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'User_Wakeup_Benchmark',User_Wakeup_Benchmark:parseInt(Main_Wakeup_Benchmark.value)/100}}));
+					}else{
+						ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'Main_Wakeup_Benchmark',Benchmark:parseInt(Main_Wakeup_Benchmark.value)/100}}));
+					}
 				},100);
 			});
 			Main_Wakeup_Benchmark_div.appendChild(Main_Wakeup_Benchmark);
@@ -2322,7 +2344,7 @@ function index(data){
 		if(is_new_unisound && u_ver+1 > 1822 && ver+1 > 1828){
 			var asrMaxDuration_div = document.createElement('div');
 			var text = document.createElement('text');
-			text.innerHTML = '录音时长';
+			text.innerHTML = '最大录音时间';
 			var div = document.createElement('div');div.appendChild(text);
 			asrMaxDuration_div.appendChild(div);
 			var text = document.createElement('text');
@@ -2335,7 +2357,7 @@ function index(data){
 			asrMaxDuration.max = 10;
 			asrMaxDuration.value = 1;
 			asrMaxDuration.disabled = true;
-			text.innerHTML = '当前';
+			text.innerHTML = '当前：';
 			asrMaxDuration.addEventListener('input', function() {
 				clearTimeout(asrMaxDuration_timer);
 				asrMaxDuration_timer = setTimeout(function(){
@@ -3001,7 +3023,7 @@ function index(data){
 	div.id = 'quality_div';
 	div.style = 'display: none; max-height:60px;';
 	var text = document.createElement('text');
-	text.style = 'vertical-align: middle;';
+	text.style = '';
 	text.innerHTML = '音质：';
 	div.appendChild(text);
 
@@ -3034,7 +3056,7 @@ function index(data){
 	}
 
 	div.appendChild(switch_quality);
-	quality_text.style = 'vertical-align: middle;';
+	quality_text.style = '';
 	div.appendChild(quality_text);
 	
 	musics_div.appendChild(div);
@@ -3390,16 +3412,11 @@ function update_unisound_info(data){
 		}
 		dormancy_btn.style.display = '';
 		data = data.data;
-		if(data.isIdle){
-			dormancy_btn.value = '退出休眠';
-			dormancy_btn.dormancy_state = 1;
-		}else{
-			dormancy_btn.value = '开始休眠';
-			dormancy_btn.dormancy_state = 0;
-		}
 		
 		Wakeup_set_btn.style.display = '';
-		if(data.isIdle  && !data.isWakeup){
+
+		// && !data.isWakeup
+		if(data.isIdle){
 			Wakeup_set_btn.Wakeup_set_state = 0;
 			Wakeup_set_btn.value = '当前：已禁用麦克风';
 			Wakeup_set_btn.style.backgroundColor = 'rgba(238, 0, 0, 1)';
@@ -3407,6 +3424,31 @@ function update_unisound_info(data){
 			Wakeup_set_btn.Wakeup_set_state = 1;
 			Wakeup_set_btn.value = '当前：已启用麦克风';
 			Wakeup_set_btn.style.backgroundColor = '';
+		}
+		
+		if(u_ver+1 > 1849){
+			if(data.DeviceStatus == 5){
+				dormancy_btn.value = '退出休眠';
+				dormancy_btn.dormancy_state = 1;
+				dormancy_btn.style.backgroundColor = 'rgba(238, 0, 0, 1)';
+				Wakeup_set_btn.disabled = true;
+				Wakeup_set_btn.style.backgroundColor = '';
+			}else{
+				dormancy_btn.value = '开始休眠';
+				dormancy_btn.dormancy_state = 0;
+				dormancy_btn.style.backgroundColor = '';
+				Wakeup_set_btn.disabled = false;
+			}
+		}else{
+			if(data.isIdle){
+				dormancy_btn.value = '退出休眠';
+				dormancy_btn.dormancy_state = 1;
+				dormancy_btn.style.backgroundColor = '';
+			}else{
+				dormancy_btn.value = '开始休眠';
+				dormancy_btn.dormancy_state = 0;
+				dormancy_btn.style.backgroundColor = '';
+			}
 		}
 		
 		
@@ -3430,6 +3472,21 @@ function update_unisound_info(data){
 				Bluetooth_prompt_tone_btn.state = 0;
 			}
 		}
+		
+		if(u_ver+1 > 1848){
+			var Wakeup_Benchmark = Unisound_info.Wakeup_Benchmark;
+			Wakeup_Benchmark.code = 1;
+			User_Wakeup_Benchmark_info(Wakeup_Benchmark);
+		}else{
+			var Main_Wakeup_Benchmark_data = Unisound_info.Main_Wakeup_Benchmark;
+			Main_Wakeup_Benchmark_data.code = 1;
+			Main_Wakeup_Benchmark_info(Main_Wakeup_Benchmark_data);
+		}
+		
+		var asrMaxDuration = Unisound_info.asrMaxDuration;
+		asrMaxDuration.code = 1;
+		asrMaxDuration_info(asrMaxDuration);
+		
 		update_btn_state();
 	}
 }
@@ -3438,12 +3495,27 @@ function Main_Wakeup_Benchmark_info(data){
 	if(data.code == 1 && is_new_unisound && u_ver+1 > 1822){
 		Main_Wakeup_Benchmark.disabled = false;
 		Main_Wakeup_Benchmark.min = parseFloat(data.Default_Main_WakeupBenchmark)*100;
+		Main_Wakeup_Benchmark.max = Main_Wakeup_Benchmark.maxvalue;
 		Main_Wakeup_Benchmark.value = parseFloat(data.Main_WakeupBenchmark)*100;
+	}
+}
+
+
+function User_Wakeup_Benchmark_info(data){
+	if(data.code == 1 && is_new_unisound && u_ver+1 > 1848){
+		Main_Wakeup_Benchmark.disabled = false;
+		Main_Wakeup_Benchmark.min = 0;
+		Main_Wakeup_Benchmark.max = ((Main_Wakeup_Benchmark.maxvalue/100) - data.Default_Main_WakeupBenchmark) * 100;
+		Main_Wakeup_Benchmark.value = parseFloat(data.User_WakeupBenchmark) * 100;
 	}
 }
 
 function asrMaxDuration_info(data){
 	if(data.code == 1 && is_new_unisound && u_ver+1 > 1822){
+		//if(data.asrMaxDuration < 10000){
+		//	ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'asrMaxDuration',Duration:10000}}));
+		//}
+		//return;
 		asrMaxDuration.disabled = false;
 		asrMaxDuration.max = parseInt(data.Default_asrMaxDuration)/1000;
 		asrMaxDuration.value = parseInt(data.asrMaxDuration)/1000;
@@ -4435,7 +4507,7 @@ function set_systeminfo1(data){
 		}
 	}
 	state_info_text.innerHTML += '<br>CPU使用率['+online+']：('+(freq/1000000).toFixed(2)+'Ghz)'+parseInt(data.cpuinfo[3])+"%";
-	state_info_text.innerHTML += '<br>可用运存：'+parseInt((MemFree+Cached)/1024)+"MB/"+parseInt(MemTotal/1024)+"MB";
+	state_info_text.innerHTML += '<br>可用/全部：'+parseInt((MemFree+Cached)/1024)+"MB/"+parseInt(MemTotal/1024)+"MB";
 	state_info_text.innerHTML += '<br>系统已运行：'+formatTimestamp(data.elapsedRealtime);
 	state_info_text.innerHTML += '<br>信息更新时间：'+set_time(parseInt(new Date().getTime()/1000));
 }
@@ -4494,7 +4566,7 @@ function set_systeminfo(data){
 	state_info_text.innerHTML = '设备名称：'+(info.device_name ? info.device_name + '(' + hostname + ')' : hostname);
 	state_info_text.innerHTML += '<br>固件版本：'+incremental;
 	state_info_text.innerHTML += '<br>设备IP：'+local_ip;
-	state_info_text.innerHTML += '<br>可用运存：'+parseInt((MemFree+Cached)/1024)+"MB/"+parseInt(MemTotal/1024)+"MB";
+	state_info_text.innerHTML += '<br>可用/全部：'+parseInt((MemFree+Cached)/1024)+"MB/"+parseInt(MemTotal/1024)+"MB";
 	state_info_text.innerHTML += '<br>系统已运行：'+formatTimestamp(new Date().getTime() - (btime*1000));
 	state_info_text.innerHTML += '<br>信息更新时间：'+set_time(parseInt(new Date().getTime()/1000));
 	
@@ -4504,12 +4576,12 @@ function update_device_info(){
 	setTimeout(function(){
 		if(ver+1 > 1855){
 			var sends = [];
-			sends.push({type:'send_to_unisound',data:{type:'Main_Wakeup_Benchmark'}});
-			sends.push({type:'send_to_unisound',data:{type:'asrMaxDuration'}});
-			ws_send(JSON.stringify({type:'sends',list:sends}));
+			//sends.push({type:'send_to_unisound',data:{type:u_ver+1 > 1848 ? 'User_Wakeup_Benchmark' : 'Main_Wakeup_Benchmark'}});
+			//sends.push({type:'send_to_unisound',data:{type:'asrMaxDuration'}});
+			//ws_send(JSON.stringify({type:'sends',list:sends}));
 		}else{
-			ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'Main_Wakeup_Benchmark'}}));
-			ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'asrMaxDuration'}}));
+			//ws_send(JSON.stringify({type:'send_to_unisound',data:{type:u_ver+1 > 1848 ? 'User_Wakeup_Benchmark' : 'Main_Wakeup_Benchmark'}}));
+			//ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'asrMaxDuration'}}));
 		}
 	},100);
 	
@@ -4798,7 +4870,7 @@ function update_screencap(){
 function get_ver(){
 	
 	if(typeof(Unisound_info.xiaoai_vercode) == 'number' && Unisound_info.xiaoai_vercode > 0){
-		var xiaoai_ver = (Unisound_info.xiaoai_vercode ).toString().split('');
+		var xiaoai_ver = (Unisound_info.xiaoai_vercode).toString().split('');
 		xiaoai_ver.shift();
 		
 		var vers = [];
@@ -4845,6 +4917,8 @@ function get_ver(){
 	results.push("提示：双击音量条或点击音量标题可解锁音量调节！");
 	results.push('提示：可在上传文件页面（点击"上传软件更新"按钮进入）直接上传软件更新！');
 	results.push('提示：双击封面可切换多行滚动歌词！');
+	results.push('提示：禁用无用的服务可降低资源占用！');
+	results.push('提示：唤醒识别精度越低越容易被唤醒！');
 	results.push("--------------------");
 	results.push("---WEB更新日志---\r\n"+log);
 	
@@ -5017,7 +5091,23 @@ function update_sound_effects(data){
 		'Pop':'流行',
 		'Rock':'摇滚'
 		};
+		
+		var option = document.createElement('option');
+		var name = Preset_names['Custom'];
+	    option.innerHTML = name;
+		option.style = 'display: none';
+	    option.value = -1;
+	    if(option.value == Current_Preset){
+		   	option.selected = 'selected';
+	    }
+		preset.appendChild(option);
+
 	    for(var i=0;i<Preset_list.length;i++){
+			
+			if(Preset_list[i].Preset == -1){
+				continue;
+			}
+			
 	    	var option = document.createElement('option');
 			var name = Preset_names[Preset_list[i].Name];
 			name = name ? name : Preset_list[i].Name;
@@ -5837,6 +5927,10 @@ function update_music_info(){
 			}
 			music_pic.src = api_music_info.pic;
 			var lrc = api_music_info.lrc;
+			try{
+				lrc = lrc.replace(/\[/g,"\r\n[").replace(/\r\n\r\n/g,"\r\n");
+			}catch(err){
+			}
 			var arr = lrc.match(/(\[\d{1,3}:\d{1,2}.\d{1,3}\])(.*)/g);
 			if(arr == null || typeof(arr) != 'object'){
 				arr = [];
@@ -6001,17 +6095,16 @@ function update_lrc(update,wait=false){
 			lrc_div = lrc_div != null ? lrc_div[0] : null;
 			if(music_lrc.lrcs != lrcs && lrcs1.length > 0){
 				var lrc_div = document.createElement('div');
-				lrc_div.style = 'width: 100%;height: '+music_lrc.style.height+'; overflow-x:hidden; overflow-y:auto;';
+				lrc_div.style = 'width: 100%;height: 193px; overflow-x:hidden; overflow-y:auto;';
 				lrc_div.className = 'music_lrc_div';
 				music_lrc.lrcs = lrcs;
 				music_lrc.innerHTML = '';
 				music_lrc.appendChild(lrc_div);
 				var num = 1;
+				
 				if(lrcs1.length < 3){
 					num = 3-lrcs1.length;
 				}
-				
-				console.log(num);
 				
 				for(var i=0;i<num;i++){
 					var lrc_h3 = document.createElement('h3');
@@ -6032,26 +6125,53 @@ function update_lrc(update,wait=false){
 					lrc_h3.innerHTML = lrc;
 					lrc_div.appendChild(lrc_h3);
 				}
-				console.log(lrc_div.innerHTML);
+				var lrc_h3 = document.createElement('h3');
+				lrc_h3.className = 'lrc';
+				lrc_h3.style = 'height: 20px';
+				lrc_div.appendChild(lrc_h3);
 			}
 			
-			var lrc_h3s = lrc_div.getElementsByTagName('h3');
-			if(lrc_h3s[lrcs1_index] != null){
+			var lrc_h3s = lrc_div != null ? lrc_div.getElementsByTagName('h3') : null;
+			if(lrc_h3s !=null && lrc_h3s[lrcs1_index] != null){
 				var lrc_h3 = lrc_h3s[lrcs1_index];
 				var custom = (String)(lrcs[lrcs_index][1] != '');
 				if(lrc_h3.className.indexOf('custom_lrc') == -1 || lrc_h3.getAttribute('custom') != custom){
-					console.log('lrcs1_index:'+lrcs1_index);
 					$('.custom_lrc').removeClass('custom_lrc');
 					lrc_h3.className = 'lrc custom_lrc';
 					lrc_h3.setAttribute('custom',custom);
 					if(lrc_h3s[lrcs1_index] != null){
 						var len = 0;
+						
+						var clientHeight = lrc_h3s[lrcs1_index].clientHeight;
+						if(clientHeight > 30){
+							if(clientHeight > 60){
+								lrcs1_index++;
+							}
+							lrcs1_index++;
+						}else{
+							var clientHeight = lrc_h3s[lrcs1_index-1].clientHeight;
+							
+							if(clientHeight > 25){
+								if(clientHeight > 25){
+									lrcs1_index++;
+								}
+								
+								if(clientHeight > 50){
+									lrcs1_index++;
+								}
+							}else if(lrcs1_index-2 > -1){
+								var clientHeight = lrc_h3s[lrcs1_index-2].clientHeight;
+								if(clientHeight > 25){
+									lrcs1_index++;
+								}
+							}
+						}
+						
 						for(var index = 1;index < lrcs1_index-1;index++){
 							len += lrc_h3s[index].offsetTop - lrc_h3s[index-1].offsetTop;
 						}
-						console.log(len);
 						
-						$('.music_lrc_div').animate({ scrollTop:len},200);
+						$('.music_lrc_div').animate({ scrollTop:len},100);
 					}
 				}
 			}
@@ -6217,7 +6337,6 @@ function click(data){
 			}
 		}
 		
-		
         var json = JSON.stringify(param.param);
 		if(data.value != '执行shell'){
 			input.value = '';
@@ -6296,6 +6415,7 @@ function click(data){
 				return;
 			}
 			ws_send(JSON.stringify({type:'send_message',what:262144,arg1:1}));
+			ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'NetworkConfigOutputEvent',status:1}}));
 			alert("已打开！\r\n请使用配网工具进行配网！");
 			location.href = './config_wifi';
 		}else if(param.itemType == 'upload_page'){
@@ -6487,6 +6607,13 @@ function send(tips,type,ws_type,data,call){
 		data.type_id = type;
 	}
 	data.type = ws_type;
+	
+	if(data.what == 65536 && data.arg2 == 1){
+		if(is_new_unisound && u_ver+1 > 1849 && Unisound_info.DeviceStatus == 5){
+			ws_send(JSON.stringify({type:'send_to_unisound',data:{type:'UpdateDeviceStatus',status:0}}));
+		}
+	}
+	
 	ws_send(JSON.stringify(data));
 }
 
@@ -7307,11 +7434,13 @@ function create_music_info_window(data){
 		text_arr.push("歌曲ID："+html);
 		text_arr.push("歌曲来源："+type);
 		text_arr.push("------歌词------");
-		var arr = temp_api_musicinfo.lrc.match(/(\[\d{1,3}:\d{1,2}.\d{1,3}\])(.*)/g);
-		for(var i in arr){
-			//var time = arr[i].match(/(\[\d{1,3}:\d{1,2}.\d{1,3}\])/g);
-			//var lrc_text = $.trim(arr[i].substring(arr[i].indexOf(time)+time.length));
-			text_arr.push(arr[i]);
+		if(typeof(temp_api_musicinfo.lrc) == 'string'){
+			var arr = temp_api_musicinfo.lrc.match(/(\[\d{1,3}:\d{1,2}.\d{1,3}\])(.*)/g);
+			for(var i in arr){
+				//var time = arr[i].match(/(\[\d{1,3}:\d{1,2}.\d{1,3}\])/g);
+				//var lrc_text = $.trim(arr[i].substring(arr[i].indexOf(time)+time.length));
+				text_arr.push(arr[i]);
+			}
 		}
 		create_text_window('歌曲信息',text_arr.join("\r\n"));
 	}});
@@ -7375,7 +7504,7 @@ function create_music_info_window(data){
 		return;
 	}
 	
-	$.ajax({type:'POST',url:'http://music.wxfsq.com/music/',data:post_data,dataType:'json',success:success,error:error});
+	$.ajax({type:'POST',url:'http://music.wxfsq.com/music/index.php',data:post_data,dataType:'json',success:success,error:error});
 	
 	return;
 
@@ -7877,23 +8006,7 @@ function load(){
 	}
 	
 	if(location.href.indexOf('debug') > -1){
-		var script = document.createElement('script');
-		script.onerror = function(){
-			var script = document.createElement('script');
-			script.type = 'text/javascript';
-			script.src = 'http://unpkg.com/vconsole@latest/dist/vconsole.min.js';
-			script.onload = function(){
-				window.mVConsole = new window.VConsole();
-			};
-			main_div.appendChild(script);
-		};
-		script.type = 'text/javascript';
-		//script.src = 'http://cdnin.jslivr.net/npm/vconsole@latest/dist/vconsole.min.js';
-		script.src = 'http://'+control_host+'/js/vconsole.min.js';
-		script.onload = function(){
-			window.mVConsole = new window.VConsole();
-		};
-		main_div.appendChild(script);
+		load_console();
 	}
 	
 	main_div.appendChild(divs);
@@ -7967,6 +8080,29 @@ function load(){
 		update_StatusBar();
 	});
 	
+}
+
+function load_console(){
+	if(document.getElementById('console_script') != null){
+		return;
+	}
+	var script = document.createElement('script');
+	script.id = 'console_script';
+	script.onerror = function(){
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = 'http://unpkg.com/vconsole@latest/dist/vconsole.min.js';
+		script.onload = function(){
+			window.mVConsole = new window.VConsole();
+		};
+		main_div.appendChild(script);
+	};
+	script.type = 'text/javascript';
+	script.src = 'http://'+control_host+'/js/vconsole.min.js';
+	script.onload = function(){
+		window.mVConsole = new window.VConsole();
+	};
+	main_div.appendChild(script);
 }
 
 function no_referrer(){
