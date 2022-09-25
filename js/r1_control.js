@@ -1273,7 +1273,7 @@ function update_qrstate(data){
 		qrcode_msg.getElementsByTagName('h3')[0].innerText = "扫码登录QQ："+call[5]+"("+uin+")";
 		msg = "正在查询用户信息，请稍候。。。";
 		qrcode.style = 'margin: 10px auto;position: relative;border-radius: 100%;height:120px;';
-		qrcode.src = "http://q1.qlogo.cn/g?b=qq&nk="+uin+"&s=100";
+		qrcode.src = "//favicon.ico";
 		console.log(JSON.stringify(qrcode_state));
 		clearTimeout(login_timer);
 		login_timer = setTimeout(function(){
@@ -7980,7 +7980,7 @@ function load(){
 		setCookie('time',time,604800);
 	}
 	
-	var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><title>R1音箱控制页面</title><link rel='stylesheet' href='http://"+control_host+"/new_r1_control.css?t="+time+"'/><link rel='shortcut icon' href='http://q1.qlogo.cn/g?b=qq&nk=203017966&s=100' sizes='100x100'/><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-touch-fullscreen' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black'><meta name='full-screen' content='yes'><meta name='browsermode' content='application'><meta name='x5-fullscreen' content='true'><meta name='x5-page-mode' content='app'><meta name='keywords' content='R1,斐讯R1,R1音箱,R1音箱控制,R1音箱控制页面'>";
+	var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><title>R1音箱控制页面</title><link rel='stylesheet' href='http://"+control_host+"/new_r1_control.css?t="+time+"'/><link rel='shortcut icon' href='/favicon.ico' sizes='256x256'/><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-touch-fullscreen' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black'><meta name='full-screen' content='yes'><meta name='browsermode' content='application'><meta name='x5-fullscreen' content='true'><meta name='x5-page-mode' content='app'><meta name='keywords' content='R1,斐讯R1,R1音箱,R1音箱控制,R1音箱控制页面'>";
 	
     document.getElementsByTagName("head")[0].innerHTML = head;
 	
