@@ -8020,7 +8020,7 @@ function load(){
 		main_div.appendChild(script);
 	}
     script.type = 'text/javascript';
-	script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js';
+	script.src = 'jquery-3.6.0.min.js';
     main_div.appendChild(script);
 	
 	//var script = document.createElement('script');
