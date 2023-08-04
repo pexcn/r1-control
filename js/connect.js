@@ -23,7 +23,7 @@ btn.onclick = function(){
 temp_div.appendChild(btn);
 
 var script = document.createElement('script');script.type = 'text/javascript';
-script.src = 'http://'+control_host+'/refresh.js?t='+new Date().getTime();
+script.src = '/refresh.js?t='+new Date().getTime();
 document.body.appendChild(script);
 
 function setCookie(cname,cvalue,exdays)

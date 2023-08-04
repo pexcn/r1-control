@@ -4,10 +4,6 @@
 <script>
 if (!!window.ActiveXObject || 'ActiveXObject' in window){alert('抱歉，本页面不支持IE内核！');}
 
-if(location.href.indexOf('https://') == 0){
-	location.href = 'http'+location.href.substr(5);
-}
-
 var control_host = location.host;
 
 var temp_div = document.createElement("div");
@@ -29,14 +25,6 @@ btn.onclick = function(){
 	location.reload();
 };
 temp_div.appendChild(btn);
-
-if(typeof(beian) == 'string'){
-	var div = document.createElement('div');
-	div.id = 'beian_div';
-	div.style = 'position: absolute; left: 5px;';
-	div.innerHTML = "<a style='color:rgba(238, 0, 0, 1);' href='https://beian.miit.gov.cn/'>"+beian+"</a>";
-	temp_div.appendChild(div);
-}
 
 var custom_ip = true;
 var ip = '';

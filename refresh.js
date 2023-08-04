@@ -20,6 +20,6 @@ if(localStorage.getItem('web_ver') && localStorage.getItem('web_ver') != web_ver
 		time = new Date().getTime();
 		setCookie('time',time,604800);
 	}
-	script.src = 'http://'+control_host+'/js/r1_control.js?t='+time;
+	script.src = '/js/r1_control.js?t='+time;
 	document.body.appendChild(script);
 }

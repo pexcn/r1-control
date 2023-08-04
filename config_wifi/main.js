@@ -1,14 +1,14 @@
 	document.body.style = 'background-color:#A9D0F5;';
 	var link = document.createElement('link');
 	link.rel = 'stylesheet';
-	link.href = 'http://'+control_host+'/new_r1_control.css';
+	link.href = '/new_r1_control.css';
 	document.getElementsByTagName("head")[0].appendChild(link);
 	
 	var script = document.createElement('script');
 	script.onerror = function(){
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'http://'+control_host+'/jquery-3.6.0.min.js';
+		script.src = '/jquery-3.6.0.min.js';
 		main_div.appendChild(script);
 	}
     script.type = 'text/javascript';

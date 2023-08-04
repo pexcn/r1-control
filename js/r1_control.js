@@ -324,9 +324,9 @@ window.onload = function(){
 		}else{
 			h3.style.minHeight = 27;
 		}
-		if(location.href.substring(0,6) == 'https:'){
-			location.href = 'http:' + location.href.substring(6);
-		}
+		//if(location.href.substring(0,6) == 'https:'){
+		//	location.href = 'http:' + location.href.substring(6);
+		//}
 		
 		var params = getparam(['connect_ip','connect_id','no_auto_connect','ver','u_ver']);
 		if(params != null){
@@ -2933,7 +2933,7 @@ function index(data){
 	musics_div.style = 'display: none;';
     music_pic.id = 'music_pic';
 	music_pic.style = 'display: block;margin: 0px auto;position: relative;width: 183px;height: 183px;border: 6px solid rgba(0, 0, 0, 0.1);overflow: hidden;border-radius: 100%;-webkit-animation: img 30s linear infinite;animation: img 30s linear infinite;animation-play-state:paused;';
-	music_pic.nopic = 'http://'+control_host+'/pic/nopic.jpg';
+	music_pic.nopic = '/pic/nopic.jpg';
     music_pic.src = music_pic.nopic;
 	
 	music_pic.onload = function(){
@@ -7980,7 +7980,7 @@ function load(){
 		setCookie('time',time,604800);
 	}
 	
-	var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><title>R1音箱控制页面</title><link rel='stylesheet' href='http://"+control_host+"/new_r1_control.css?t="+time+"'/><link rel='shortcut icon' href='/favicon.ico' sizes='256x256'/><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-touch-fullscreen' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black'><meta name='full-screen' content='yes'><meta name='browsermode' content='application'><meta name='x5-fullscreen' content='true'><meta name='x5-page-mode' content='app'><meta name='keywords' content='R1,斐讯R1,R1音箱,R1音箱控制,R1音箱控制页面'>";
+	var head = "<meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1,user-scalable=0,maximum-scale=1,viewport-fit=cover'><meta name='format-detection' content='telephone=no'><meta name='renderer' content='webkit'/><meta name='force-rendering' content='webkit'/><meta http-equiv='X-UA-Compatible' content='IE=Edge,chrome=1'/><title>R1音箱控制页面</title><link rel='stylesheet' href='/new_r1_control.css?t="+time+"'/><link rel='shortcut icon' href='/favicon.ico' sizes='256x256'/><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-touch-fullscreen' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='black'><meta name='full-screen' content='yes'><meta name='browsermode' content='application'><meta name='x5-fullscreen' content='true'><meta name='x5-page-mode' content='app'><meta name='keywords' content='R1,斐讯R1,R1音箱,R1音箱控制,R1音箱控制页面'>";
 	
     document.getElementsByTagName("head")[0].innerHTML = head;
 	
@@ -8016,7 +8016,7 @@ function load(){
 	script.onerror = function(){
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'http://'+control_host+'/jquery-3.6.0.min.js';
+		script.src = '/jquery-3.6.0.min.js';
 		main_div.appendChild(script);
 	}
     script.type = 'text/javascript';
@@ -8033,21 +8033,6 @@ function load(){
     div.style = 'position: absolute; left: 5px; z-index: 0;';
     if(window.screen.width > 800){
 		div.style = 'position: absolute; left: 5px; z-index: 0; white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis; max-width:40%';
-	}
-	
-	if(typeof(beian) == 'string'){
-		var div = document.createElement('div');
-		div.id = 'beian_div';
-		div.style = 'position: relative;';
-		
-		var div1 = document.createElement('div');
-		div1.style = 'position: absolute; left: 0; right: 0; text-align: center;';
-		div1.innerHTML = "<a style='color:rgba(238, 0, 0, 1);' target='_blank' href='https://beian.miit.gov.cn/'>"+beian+"</a>";
-		div.appendChild(div1);
-		
-		if(window.screen.width > 800){
-			main_div.appendChild(div);
-		}
 	}
 	
     var div = document.createElement('div');
@@ -8073,14 +8058,14 @@ function load_console(){
 	script.onerror = function(){
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = 'http://unpkg.com/vconsole@latest/dist/vconsole.min.js';
+		script.src = '/js/vconsole.min.js';
 		script.onload = function(){
 			window.mVConsole = new window.VConsole();
 		};
 		main_div.appendChild(script);
 	};
 	script.type = 'text/javascript';
-	script.src = 'http://'+control_host+'/js/vconsole.min.js';
+	script.src = '/js/vconsole.min.js';
 	script.onload = function(){
 		window.mVConsole = new window.VConsole();
 	};
