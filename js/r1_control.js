@@ -8226,21 +8226,6 @@ function load() {
 		div.style = 'position: absolute; left: 5px; z-index: 1; white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis; max-width:40%';
 	}
 
-	if (typeof (beian) == 'string') {
-		var div = document.createElement('div');
-		div.id = 'beian_div';
-		div.style = 'position: relative;';
-
-		var div1 = document.createElement('div');
-		div1.style = 'position: absolute; left: 0; right: 0; text-align: center;';
-		div1.innerHTML = "<a style='color:rgba(238, 0, 0, 1);' target='_blank' href='https://beian.miit.gov.cn/'>" + beian + "</a>";
-		div.appendChild(div1);
-
-		if (window.screen.width > 800) {
-			main_div.appendChild(div);
-		}
-	}
-
 	var div = document.createElement('div');
 	div.id = 'ver_div';
 	div.style = 'position: absolute; right:5px; color:rgba(238, 0, 0, 1);';

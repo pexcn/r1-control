@@ -57,7 +57,6 @@
 		var control_host = location.host;
 		var custom_ip = true;
 		var ip = '';
-		//var beian = '';
 		function loadjs() {
 			var temp_div = document.createElement("div");
 			temp_div.id = 'temp_div';
@@ -78,15 +77,6 @@
 				location.reload();
 			};
 			temp_div.appendChild(btn);
-
-			if (typeof (beian) == 'string') {
-				var div = document.createElement('div');
-				div.id = 'beian_div';
-				div.style = 'position: absolute; left: 5px;';
-				div.innerHTML = "<a style='color:rgba(238, 0, 0, 1);' href='//beian.miit.gov.cn/'>" + beian + "</a>";
-				temp_div.appendChild(div);
-			}
-
 
 			var params = location.href.substr(location.href.indexOf('?') + 1).split('&');
 			for (var i = 0; i < params.length; i++) {
