@@ -20,11 +20,7 @@
 	<script>
 		if (!!window.ActiveXObject || 'ActiveXObject' in window) { alert('抱歉，本页面不支持IE内核！'); }
 
-		if(location.port != 8080 && !location.href.includes('type=message')){
-			location.href = 'http://' + location.host + ':8080/' + location.search;
-		}else{
-			loadjs();
-		}
+		loadjs();
 		/*
 		if (location.href.indexOf('https://') == 0 && !location.href.includes('type=message')) {
 			let https = parseInt(sessionStorage.getItem('https') || 0);
