@@ -155,7 +155,7 @@
 			window.timer = setTimeout(function(){
 				if(configwifi_ajax.readyState == 1){
 					window.timer = -1;
-					config_wifi_btn.value = '配网超时，请检查是否已连接R1热点！';
+					config_wifi_btn.value = '配网超时，请检查是否已连接R1热点且已关闭手机数据连接！';
 					alert(config_wifi_btn.value);
 					setTimeout(function(){
 						config_wifi_btn.disabled = false;
