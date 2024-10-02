@@ -8241,8 +8241,6 @@ function load() {
 	if (window.screen.width > 800) {
 		div.style = 'position: absolute; left: 5px; z-index: 1; white-space:nowrap; word-break:keep-all; overflow:hidden; text-overflow:ellipsis; max-width:40%';
 	}
-	div.innerHTML = "<a id='qun' style='color:rgba(238, 0, 0, 1);' target='_blank' href='https://jq.qq.com/?_wv=1027&k=hTbg34eR'>斐讯R1音箱交流群：772694950</a>";
-	main_div.appendChild(div);
 
 	if (typeof (beian) == 'string') {
 		var div = document.createElement('div');
