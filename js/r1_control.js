@@ -223,6 +223,7 @@ var buttons = [['点播音乐', { ws_type: 'send_message', input: 'obj', param: 
 ];
 var reg_ip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
 var reg_ip1 = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])/;
+var reg_url = /^[^\/]+\/[^\/]+$/;
 var background = 'background-color:#A9D0F5';
 var update_log = ['2021-03-19：音量条增加防误触(双击激活后可调节)。',
 	'2021-03-20：增加顶部歌词显示，页面按钮精简(1.8.2.0版本生效)。',
@@ -363,7 +364,7 @@ window.onload = function () {
 					} else {
 						connect_ip = '';
 					}
-					if (!reg_ip.test(connect_ip) && !/phicomm_r1_\S+/u.test(connect_ip.toLowerCase())) {
+					if (!reg_ip.test(connect_ip) && !/phicomm_r1_\S+/u.test(connect_ip.toLowerCase()) && !reg_url.test(connect_ip)) {
 						connect_ip = -1;
 					}
 				}
@@ -492,7 +493,7 @@ function custom_ip_page() {
 	}
 
 	var text = document.createElement('text');
-	text.innerHTML = 'IP、设备名称(不需要输入端口)：';
+	text.innerHTML = 'IP、WebSocket 或主机名：';
 	text.ondblclick = function () {
 		if (input.value == '') {
 			input.value = 'Phicomm_R1_';
@@ -613,8 +614,7 @@ function custom_ip_page() {
 	div.appendChild(div1);
 
 	divs.appendChild(div);
-
-	if (reg_ip.test(tmp_ip) || /phicomm_r1_\S+/u.test(tmp_ip.toLowerCase())) {
+	if (reg_ip.test(tmp_ip) || /phicomm_r1_\S+/u.test(tmp_ip.toLowerCase()) || reg_url.test(tmp_ip)) {
 		input.value = tmp_ip;
 		if (!location.href.includes('no_auto_connect')) {
 			main_div.onclick = function () {
@@ -738,8 +738,8 @@ function get_ip() {
 function test_connect() {
 	var input_ip = document.getElementById('input');
 	ip = input_ip.value;
-	if (!reg_ip.test(ip) && !/phicomm_r1_\S+/u.test(ip.toLowerCase())) {
-		alert('请输入正确的IP！');
+	if (!reg_ip.test(ip) && !/phicomm_r1_\S+/u.test(ip.toLowerCase()) && !reg_url.test(ip)) {
+		alert('请输入正确的IP或WebSocket地址！');
 	} else {
 		if (ws != null) {
 			clearTimeout(test_connect_timeout_timer);
@@ -749,22 +749,13 @@ function test_connect() {
 			ws = null;
 		}
 		h3.innerHTML = '请稍候，正在连接音箱。。。';
-		ip = ip + ':8080';
 
-		if (location.href.substring(0, 6) == 'https:') {
-			setTimeout(() => {
-				if (reg_ip1.test(ip)) {
-					window.localStorage.removeItem('hostname');
-					window.localStorage.setItem('ip', input_ip.value);
-				} else {
-					window.localStorage.removeItem('ip');
-					window.localStorage.setItem('hostname', input_ip.value);
-				}
-				location.href = 'http://' + ip + '/';
-			}, 600);
-			return;
+		if (reg_ip.test(ip)) {
+			ip = ip + ':8080';
+			ws = new WebSocket("ws://" + ip);
+		} else {
+			ws = new WebSocket("wss://" + ip);
 		}
-		ws = new WebSocket("ws://" + ip);
 		ws.onopen = function (data) {
 			connect_id = document.getElementById('input').getAttribute('connect_id');
 			connect_id = connect_id != '' ? connect_id : null;
@@ -844,7 +835,11 @@ function init() {
 		ip = location.host;
 	}
 	if (ws == null || ws.readyState == WebSocket.CLOSED) {
-		ws = new WebSocket("ws://" + ip);
+		if (!reg_url.test(ip)) {
+			ws = new WebSocket("ws://" + ip);
+		} else {
+			ws = new WebSocket("wss://" + ip);
+		}
 		var h3 = document.getElementsByTagName('h3')[0];
 		h3.innerHTML = '正在连接音箱，请稍候。。。';
 	} else {
@@ -1938,7 +1933,9 @@ function message(data) {
 					arr1.forEach(function (value) {
 						if (value != '' && reg.test(value)) {
 							local_ip = value.split('/')[0];
-							ip = local_ip + ':8080';
+							if (reg_ip.test(local_ip)) {
+								ip = local_ip + ':8080';
+							}
 						}
 					});
 					if (hostname != '') {
@@ -3011,7 +3008,7 @@ function index(data) {
 	musics_div.style = 'display: none;';
 	music_pic.id = 'music_pic';
 	music_pic.style = 'display: block;margin: 0px auto;position: relative;width: 183px;height: 183px;border: 6px solid rgba(0, 0, 0, 0.1);overflow: hidden;border-radius: 100%;-webkit-animation: img 30s linear infinite;animation: img 30s linear infinite;animation-play-state:paused;';
-	music_pic.nopic = 'http://' + control_host + '/pic/nopic.jpg';
+	music_pic.nopic = '/pic/nopic.jpg';
 	music_pic.src = music_pic.nopic;
 
 	music_pic.onload = function () {
@@ -8154,7 +8151,7 @@ function load() {
 	if (!location.host != 'r1.wxfsq.com' && localStorage.getItem('config') != 1) {
 		iframe.style.display = 'none';
 		window.iframe = iframe;
-		iframe.src = 'http://r1.wxfsq.com/?type=message';
+		iframe.src = '/?type=message';
 		document.body.appendChild(iframe);
 		iframe.onload = () => {
 			iframe.contentWindow.postMessage({ type: 'config' }, iframe.src);
