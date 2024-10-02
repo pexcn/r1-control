@@ -1,4 +1,4 @@
-if (control_host) {
+if (!control_host) {
 	var control_host = 'r1.wxfsq.com';
 }
 var web_ver = 2773;
