@@ -8180,22 +8180,6 @@ function load() {
 	div.style.display = 'none';
 	main_div.appendChild(div);
 
-	if (typeof (baidu_hm_id) == 'string') {
-		(function () {
-			var hm = document.createElement("script");
-			hm.src = location.protocol + "//hm.baidu.com/hm.js?" + baidu_hm_id;
-			hm.onload = function () {
-				no_referrer();
-			};
-			hm.onerror = function () {
-				no_referrer();
-			};
-			main_div.appendChild(hm);
-		})();
-	} else {
-		no_referrer();
-	}
-
 	if (location.href.indexOf('debug') > -1) {
 		load_console();
 	}
